@@ -1,0 +1,9 @@
+#[link(name = "opengles",
+       vers = "0.1")];
+#[crate_type = "lib"];
+
+use std;
+
+mod gl2;
+
+
