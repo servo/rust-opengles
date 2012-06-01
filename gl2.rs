@@ -2,8 +2,77 @@
 
 import libc::*;
 import libc::types::common::c99::*;
+import ptr::addr_of;
+import str::{as_c_str, from_bytes};
+import sys::size_of;
+import unsafe::reinterpret_cast;
 import vec::from_elem;
 import vec::unsafe::to_ptr;
+
+// Constants
+
+/* BeginMode */
+const POINTS:         c_uint = 0x0000 as c_uint;
+const LINES:          c_uint = 0x0001 as c_uint;
+const LINE_LOOP:      c_uint = 0x0002 as c_uint;
+const LINE_STRIP:     c_uint = 0x0003 as c_uint;
+const TRIANGLES:      c_uint = 0x0004 as c_uint;
+const TRIANGLE_STRIP: c_uint = 0x0005 as c_uint;
+const TRIANGLE_FAN:   c_uint = 0x0006 as c_uint;
+
+const DEPTH_BUFFER_BIT:   c_uint = 0x00000100 as c_uint;
+const STENCIL_BUFFER_BIT: c_uint = 0x00000400 as c_uint;
+const COLOR_BUFFER_BIT:   c_uint = 0x00004000 as c_uint;
+
+const NO_ERROR: c_uint = 0 as c_uint;
+
+/* DataType */
+const BYTE:           c_uint = 0x1400 as c_uint;
+const UNSIGNED_BYTE:  c_uint = 0x1401 as c_uint;
+const SHORT:          c_uint = 0x1402 as c_uint;
+const UNSIGNED_SHORT: c_uint = 0x1403 as c_uint;
+const INT:            c_uint = 0x1404 as c_uint;
+const UNSIGNED_INT:   c_uint = 0x1405 as c_uint;
+const FLOAT:          c_uint = 0x1406 as c_uint;
+const FIXED:          c_uint = 0x140C as c_uint;
+
+/* Shaders */
+const FRAGMENT_SHADER:                  c_uint = 0x8B30 as c_uint;
+const VERTEX_SHADER:                    c_uint = 0x8B31 as c_uint;
+const MAX_VERTEX_ATTRIBS:               c_uint = 0x8869 as c_uint;
+const MAX_VERTEX_UNIFORM_VECTORS:       c_uint = 0x8DFB as c_uint;
+const MAX_VARYING_VECTORS:              c_uint = 0x8DFC as c_uint;
+const MAX_COMBINED_TEXTURE_IMAGE_UNITS: c_uint = 0x8B4D as c_uint;
+const MAX_VERTEX_TEXTURE_IMAGE_UNITS:   c_uint = 0x8B4C as c_uint;
+const MAX_TEXTURE_IMAGE_UNITS:          c_uint = 0x8872 as c_uint;
+const MAX_FRAGMENT_UNIFORM_VECTORS:     c_uint = 0x8DFD as c_uint;
+const SHADER_TYPE:                      c_uint = 0x8B4F as c_uint;
+const DELETE_STATUS:                    c_uint = 0x8B80 as c_uint;
+const LINK_STATUS:                      c_uint = 0x8B82 as c_uint;
+const VALIDATE_STATUS:                  c_uint = 0x8B83 as c_uint;
+const ATTACHED_SHADERS:                 c_uint = 0x8B85 as c_uint;
+const ACTIVE_UNIFORMS:                  c_uint = 0x8B86 as c_uint;
+const ACTIVE_UNIFORM_MAX_LENGTH:        c_uint = 0x8B87 as c_uint;
+const ACTIVE_ATTRIBUTES:                c_uint = 0x8B89 as c_uint;
+const ACTIVE_ATTRIBUTE_MAX_LENGTH:      c_uint = 0x8B8A as c_uint;
+const SHADING_LANGUAGE_VERSION:         c_uint = 0x8B8C as c_uint;
+const CURRENT_PROGRAM:                  c_uint = 0x8B8D as c_uint;
+
+/* Shader Source */
+const COMPILE_STATUS:       c_uint = 0x8B81 as c_uint;
+const INFO_LOG_LENGTH:      c_uint = 0x8B84 as c_uint;
+const SHADER_SOURCE_LENGTH: c_uint = 0x8B88 as c_uint;
+const SHADER_COMPILER:      c_uint = 0x8DFA as c_uint;
+
+/* Buffer Objects */
+const ARRAY_BUFFER:                 c_uint = 0x8892 as c_uint;
+const ELEMENT_ARRAY_BUFFER:         c_uint = 0x8893 as c_uint;
+const ARRAY_BUFFER_BINDING:         c_uint = 0x8894 as c_uint;
+const ELEMENT_ARRAY_BUFFER_BINDING: c_uint = 0x8895 as c_uint;
+
+const STREAM_DRAW:  c_uint = 0x88E0 as c_uint;
+const STATIC_DRAW:  c_uint = 0x88E4 as c_uint;
+const DYNAMIC_DRAW: c_uint = 0x88E8 as c_uint;
 
 // Types
 
@@ -42,15 +111,27 @@ type GLintptr = intptr_t;
 type GLsizeiptr = ssize_t;
 
 
-// Exposed Rust API using Rust naming conventions
+// Helper functions
 
 fn destroy<T>(-_x: T) {
     // Just let the object drop.
 }
 
-fn buffer_data(target: GLenum, data: [u8], usage: GLenum) unsafe {
-    ret ll::glBufferData(target, data.len() as GLsizeiptr,
-                         to_ptr(data) as *GLvoid, usage);
+
+// Exposed Rust API using Rust naming conventions
+
+fn attach_shader(program: GLuint, shader: GLuint) {
+    ll::glAttachShader(program, shader);
+}
+
+fn bind_buffer(target: GLenum, buffer: GLuint) {
+    ll::glBindBuffer(target, buffer);
+}
+
+// FIXME: There should be some type-safe wrapper for this...
+fn buffer_data<T>(target: GLenum, data: [T], usage: GLenum) unsafe {
+    ll::glBufferData(target, (data.len() * size_of::<T>()) as GLsizeiptr,
+                     to_ptr(data) as *GLvoid, usage);
 }
 
 fn clear(mask: GLbitfield) {
@@ -60,6 +141,10 @@ fn clear(mask: GLbitfield) {
 fn clear_color(red: GLclampf, green: GLclampf, blue: GLclampf,
                alpha: GLclampf) {
     ll::glClearColor(red, green, blue, alpha);
+}
+
+fn compile_shader(shader: GLuint) {
+    ll::glCompileShader(shader);
 }
 
 fn create_program() -> GLuint {
@@ -80,7 +165,11 @@ fn draw_elements(mode: GLenum, element_type: GLenum, indices: [u8]) unsafe {
 }
 
 fn enable(cap: GLenum) {
-    ret ll::glEnable(cap);
+    ll::glEnable(cap);
+}
+
+fn enable_vertex_attrib_array(index: GLuint) {
+    ll::glEnableVertexAttribArray(index);
 }
 
 fn finish() {
@@ -91,21 +180,71 @@ fn flush() {
     ret ll::glFlush();
 }
 
+fn gen_buffers(n: GLsizei) -> [GLuint] unsafe {
+    let result = from_elem(n as uint, 0 as GLuint);
+    ll::glGenBuffers(n, to_ptr(result));
+    ret result;
+}
+
+fn get_attrib_location(program: GLuint, name: str) -> c_int unsafe {
+    ret as_c_str(name) {
+        |name_bytes|
+        ll::glGetAttribLocation(program, name_bytes as *GLchar)
+    };
+}
+
+fn get_error() -> GLenum {
+    ret ll::glGetError();
+}
+
+fn get_program_iv(program: GLuint, pname: GLenum) -> GLint unsafe {
+    let result: GLint = 0 as GLint;
+    ll::glGetProgramiv(program, pname, addr_of(result));
+    ret result;
+}
+
+fn get_shader_info_log(shader: GLuint) -> str unsafe {
+    let result = from_elem(1024u, 0u8);
+    let result_len: GLsizei = 0 as GLsizei;
+    ll::glGetShaderInfoLog(shader, 1024 as GLsizei, addr_of(result_len),
+                           to_ptr(result) as *GLchar);
+    ret from_bytes(result);
+}
+
+fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint unsafe {
+    let result: GLint = 0 as GLint;
+    ll::glGetShaderiv(shader, pname, addr_of(result));
+    ret result;
+}
+
+fn get_uniform_location(program: GLuint, name: str) -> c_int unsafe {
+    ret as_c_str(name) {
+        |name_bytes|
+        ll::glGetUniformLocation(program, name_bytes as *GLchar)
+    };
+}
+
 fn link_program(program: GLuint) {
     ret ll::glLinkProgram(program);
 }
 
 fn shader_source(shader: GLuint, strings: [[u8]]) unsafe {
     let pointers = strings.map { |string| to_ptr(string) };
-    let lengths = from_elem(pointers.len(), 0 as GLint);
+    let lengths = strings.map { |string| string.len() as GLint };
     ll::glShaderSource(shader, pointers.len() as GLsizei,
                        to_ptr(pointers) as **GLchar, to_ptr(lengths));
-    destroy(pointers);
     destroy(lengths);
+    destroy(pointers);
 }
 
 fn use_program(program: GLuint) {
     ll::glUseProgram(program);
+}
+
+fn vertex_attrib_pointer_f32(index: GLuint, size: GLint, normalized: bool,
+                             stride: GLsizei, offset: GLuint) unsafe {
+    ll::glVertexAttribPointer(index, size, FLOAT, normalized as GLboolean,
+                              stride, reinterpret_cast(offset as uint));
 }
 
 
