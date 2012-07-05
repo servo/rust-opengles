@@ -47,6 +47,14 @@ const UNSIGNED_INT:   c_uint = 0x1405 as c_uint;
 const FLOAT:          c_uint = 0x1406 as c_uint;
 const FIXED:          c_uint = 0x140C as c_uint;
 
+/* EnableCap */
+const TEXTURE_2D: c_uint = 0x0DE1 as c_uint;
+
+/* PixelFormat */
+const DEPTH_COMPONENT: c_uint = 0x1902 as c_uint;
+const ALPHA:           c_uint = 0x1906 as c_uint;
+const RGB:             c_uint = 0x1907 as c_uint;
+
 /* Shaders */
 const FRAGMENT_SHADER:                  c_uint = 0x8B30 as c_uint;
 const VERTEX_SHADER:                    c_uint = 0x8B31 as c_uint;
@@ -84,6 +92,21 @@ const ELEMENT_ARRAY_BUFFER_BINDING: c_uint = 0x8895 as c_uint;
 const STREAM_DRAW:  c_uint = 0x88E0 as c_uint;
 const STATIC_DRAW:  c_uint = 0x88E4 as c_uint;
 const DYNAMIC_DRAW: c_uint = 0x88E8 as c_uint;
+
+/* TextureMagFilter */
+const NEAREST: c_uint = 0x2600 as c_uint;
+const LINEAR:  c_uint = 0x2601 as c_uint;
+
+/* TextureParameterName */
+const TEXTURE_MAG_FILTER: c_uint = 0x2800 as c_uint;
+const TEXTURE_MIN_FILTER: c_uint = 0x2801 as c_uint;
+const TEXTURE_WRAP_S:     c_uint = 0x2802 as c_uint;
+const TEXTURE_WRAP_T:     c_uint = 0x2803 as c_uint;
+
+/* TextureWrapMode */
+const REPEAT:          c_uint = 0x2901 as c_uint;
+const CLAMP_TO_EDGE:   c_uint = 0x812F as c_uint;
+const MIRRORED_REPEAT: c_uint = 0x8370 as c_uint;
 
 // Types
 
@@ -137,6 +160,10 @@ fn attach_shader(program: GLuint, shader: GLuint) {
 
 fn bind_buffer(target: GLenum, buffer: GLuint) {
     ll::glBindBuffer(target, buffer);
+}
+
+fn bind_texture(target: GLenum, texture: GLuint) {
+    ll::glBindTexture(target, texture);
 }
 
 // FIXME: There should be some type-safe wrapper for this...
@@ -196,6 +223,12 @@ fn gen_buffers(n: GLsizei) -> ~[GLuint] unsafe {
     ret result;
 }
 
+fn gen_textures(n: GLsizei) -> ~[GLuint] unsafe {
+    let result = from_elem(n as uint, 0 as GLuint);
+    ll::glGenTextures(n, to_ptr(result));
+    ret result;
+}
+
 fn get_attrib_location(program: GLuint, name: str) -> c_int unsafe {
     ret as_c_str(name, |name_bytes|
         ll::glGetAttribLocation(program, name_bytes as *GLchar));
@@ -241,6 +274,26 @@ fn shader_source(shader: GLuint, strings: ~[~[u8]]) unsafe {
                        to_ptr(pointers) as **GLchar, to_ptr(lengths));
     destroy(lengths);
     destroy(pointers);
+}
+
+// FIXME: Does not verify buffer size -- unsafe!
+fn tex_image_2d(target: GLenum, level: GLint, internal_format: GLint, width: GLsizei,
+                height: GLsizei, border: GLint, format: GLenum, ty: GLenum, data: ~[u8]) unsafe {
+    let pdata = reinterpret_cast(to_ptr(data));
+    ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty, pdata);
+}
+
+fn tex_parameter_i(target: GLenum, pname: GLenum, param: GLint) {
+    ll::glTexParameteri(target, pname, param);
+}
+
+fn uniform_1i(location: GLint, x: GLint) {
+    ll::glUniform1i(location, x);
+}
+
+fn uniform_matrix_4fv(location: GLint, transpose: bool, value: ~[f32]) unsafe {
+    ll::glUniformMatrix4fv(location, 1 as GLsizei, transpose as GLboolean,
+                           to_ptr(value) as *GLfloat);
 }
 
 fn use_program(program: GLuint) {
