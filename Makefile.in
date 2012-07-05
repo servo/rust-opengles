@@ -19,7 +19,7 @@ librustopengles.dummy: opengles.rc $(RUST_SRC)
 	$(RUSTC) $(RUSTFLAGS) $< -o $@
 	touch $@
 
-opengles-test: opengles.rc $(RUST_SRC)
+rustopengles-test: opengles.rc $(RUST_SRC)
 	$(RUSTC) $(RUSTFLAGS) $< -o $@ --test
 
 check: rustopengles-test
