@@ -129,7 +129,7 @@ fn bind_buffer(target: GLenum, buffer: GLuint) {
 }
 
 // FIXME: There should be some type-safe wrapper for this...
-fn buffer_data<T>(target: GLenum, data: [T], usage: GLenum) unsafe {
+fn buffer_data<T>(target: GLenum, data: ~[T], usage: GLenum) unsafe {
     ll::glBufferData(target, (data.len() * size_of::<T>()) as GLsizeiptr,
                      to_ptr(data) as *GLvoid, usage);
 }
@@ -138,8 +138,7 @@ fn clear(mask: GLbitfield) {
     ll::glClear(mask);
 }
 
-fn clear_color(red: GLclampf, green: GLclampf, blue: GLclampf,
-               alpha: GLclampf) {
+fn clear_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
     ll::glClearColor(red, green, blue, alpha);
 }
 
@@ -159,7 +158,7 @@ fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
     ret ll::glDrawArrays(mode, first, count);
 }
 
-fn draw_elements(mode: GLenum, element_type: GLenum, indices: [u8]) unsafe {
+fn draw_elements(mode: GLenum, element_type: GLenum, indices: ~[u8]) unsafe {
     ret ll::glDrawElements(mode, indices.len() as GLsizei, element_type,
                            to_ptr(indices) as *c_void);
 }
@@ -180,17 +179,15 @@ fn flush() {
     ret ll::glFlush();
 }
 
-fn gen_buffers(n: GLsizei) -> [GLuint] unsafe {
+fn gen_buffers(n: GLsizei) -> ~[GLuint] unsafe {
     let result = from_elem(n as uint, 0 as GLuint);
     ll::glGenBuffers(n, to_ptr(result));
     ret result;
 }
 
 fn get_attrib_location(program: GLuint, name: str) -> c_int unsafe {
-    ret as_c_str(name) {
-        |name_bytes|
-        ll::glGetAttribLocation(program, name_bytes as *GLchar)
-    };
+    ret as_c_str(name, |name_bytes|
+        ll::glGetAttribLocation(program, name_bytes as *GLchar));
 }
 
 fn get_error() -> GLenum {
@@ -218,19 +215,17 @@ fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint unsafe {
 }
 
 fn get_uniform_location(program: GLuint, name: str) -> c_int unsafe {
-    ret as_c_str(name) {
-        |name_bytes|
-        ll::glGetUniformLocation(program, name_bytes as *GLchar)
-    };
+    ret as_c_str(name, |name_bytes|
+        ll::glGetUniformLocation(program, name_bytes as *GLchar));
 }
 
 fn link_program(program: GLuint) {
     ret ll::glLinkProgram(program);
 }
 
-fn shader_source(shader: GLuint, strings: [[u8]]) unsafe {
-    let pointers = strings.map { |string| to_ptr(string) };
-    let lengths = strings.map { |string| string.len() as GLint };
+fn shader_source(shader: GLuint, strings: ~[~[u8]]) unsafe {
+    let pointers = strings.map(|string| to_ptr(string));
+    let lengths = strings.map(|string| string.len() as GLint);
     ll::glShaderSource(shader, pointers.len() as GLsizei,
                        to_ptr(pointers) as **GLchar, to_ptr(lengths));
     destroy(lengths);
@@ -250,7 +245,7 @@ fn vertex_attrib_pointer_f32(index: GLuint, size: GLint, normalized: bool,
 
 #[nolink]
 #[link_args="-framework OpenGL"]
-native mod ll {
+extern mod ll {
 
 // Lower-level API
 
