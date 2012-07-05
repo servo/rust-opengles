@@ -9,6 +9,17 @@ import unsafe::reinterpret_cast;
 import vec::from_elem;
 import vec::unsafe::to_ptr;
 
+// Linking
+#[nolink]
+#[link_args="-framework OpenGL"]
+#[cfg(target_os = "macos")]
+extern mod linkhack { }
+
+#[nolink]
+#[link_args="-lGL"]
+#[cfg(target_os = "linux")]
+extern mod linkhack { }
+
 // Constants
 
 /* BeginMode */
@@ -244,7 +255,6 @@ fn vertex_attrib_pointer_f32(index: GLuint, size: GLint, normalized: bool,
 
 
 #[nolink]
-#[link_args="-framework OpenGL"]
 extern mod ll {
 
 // Lower-level API
