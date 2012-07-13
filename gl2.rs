@@ -56,6 +56,8 @@ const ALPHA:           c_uint = 0x1906 as c_uint;
 const RGB:             c_uint = 0x1907 as c_uint;
 const RGBA:            c_uint = 0x1908 as c_uint;
 
+const BGRA:            c_uint = 0x80e1 as c_uint;   // NB: Not OpenGL ES!
+
 /* Shaders */
 const FRAGMENT_SHADER:                  c_uint = 0x8B30 as c_uint;
 const VERTEX_SHADER:                    c_uint = 0x8B31 as c_uint;
