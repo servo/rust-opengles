@@ -7,7 +7,7 @@ import str::{as_c_str, from_bytes};
 import sys::size_of;
 import unsafe::reinterpret_cast;
 import vec::from_elem;
-import vec::unsafe::to_ptr;
+import vec::unsafe::{to_ptr, to_ptr_slice};
 
 // Linking
 #[nolink]
@@ -54,6 +54,7 @@ const TEXTURE_2D: c_uint = 0x0DE1 as c_uint;
 const DEPTH_COMPONENT: c_uint = 0x1902 as c_uint;
 const ALPHA:           c_uint = 0x1906 as c_uint;
 const RGB:             c_uint = 0x1907 as c_uint;
+const RGBA:            c_uint = 0x1908 as c_uint;
 
 /* Shaders */
 const FRAGMENT_SHADER:                  c_uint = 0x8B30 as c_uint;
@@ -192,6 +193,10 @@ fn create_shader(shader_type: GLenum) -> GLuint {
     ret ll::glCreateShader(shader_type);
 }
 
+fn delete_textures(textures: &[GLuint]) unsafe {
+    ret ll::glDeleteTextures(textures.len() as GLsizei, to_ptr_slice(textures));
+}
+
 fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
     ret ll::glDrawArrays(mode, first, count);
 }
@@ -304,6 +309,10 @@ fn vertex_attrib_pointer_f32(index: GLuint, size: GLint, normalized: bool,
                              stride: GLsizei, offset: GLuint) unsafe {
     ll::glVertexAttribPointer(index, size, FLOAT, normalized as GLboolean,
                               stride, reinterpret_cast(offset as uint));
+}
+
+fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
+    ll::glViewport(x, y, width, height);
 }
 
 
