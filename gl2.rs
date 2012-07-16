@@ -236,7 +236,7 @@ fn gen_textures(n: GLsizei) -> ~[GLuint] unsafe {
     ret result;
 }
 
-fn get_attrib_location(program: GLuint, name: str) -> c_int unsafe {
+fn get_attrib_location(program: GLuint, name: ~str) -> c_int unsafe {
     ret as_c_str(name, |name_bytes|
         ll::glGetAttribLocation(program, name_bytes as *GLchar));
 }
@@ -251,7 +251,7 @@ fn get_program_iv(program: GLuint, pname: GLenum) -> GLint unsafe {
     ret result;
 }
 
-fn get_shader_info_log(shader: GLuint) -> str unsafe {
+fn get_shader_info_log(shader: GLuint) -> ~str unsafe {
     let result = from_elem(1024u, 0u8);
     let result_len: GLsizei = 0 as GLsizei;
     ll::glGetShaderInfoLog(shader, 1024 as GLsizei, addr_of(result_len),
@@ -265,7 +265,7 @@ fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint unsafe {
     ret result;
 }
 
-fn get_uniform_location(program: GLuint, name: str) -> c_int unsafe {
+fn get_uniform_location(program: GLuint, name: ~str) -> c_int unsafe {
     ret as_c_str(name, |name_bytes|
         ll::glGetUniformLocation(program, name_bytes as *GLchar));
 }
