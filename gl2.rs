@@ -50,6 +50,56 @@ const FIXED:          c_uint = 0x140C as c_uint;
 /* EnableCap */
 const TEXTURE_2D: c_uint = 0x0DE1 as c_uint;
 
+/* GetPName */
+const LINE_WIDTH:                    c_uint = 0x0B21 as c_uint;
+const ALIASED_POINT_SIZE_RANGE:      c_uint = 0x846D as c_uint;
+const ALIASED_LINE_WIDTH_RANGE:      c_uint = 0x846E as c_uint;
+const CULL_FACE_MODE:                c_uint = 0x0B45 as c_uint;
+const FRONT_FACE:                    c_uint = 0x0B46 as c_uint;
+const DEPTH_RANGE:                   c_uint = 0x0B70 as c_uint;
+const DEPTH_WRITEMASK:               c_uint = 0x0B72 as c_uint;
+const DEPTH_CLEAR_VALUE:             c_uint = 0x0B73 as c_uint;
+const DEPTH_FUNC:                    c_uint = 0x0B74 as c_uint;
+const STENCIL_CLEAR_VALUE:           c_uint = 0x0B91 as c_uint;
+const STENCIL_FUNC:                  c_uint = 0x0B92 as c_uint;
+const STENCIL_FAIL:                  c_uint = 0x0B94 as c_uint;
+const STENCIL_PASS_DEPTH_FAIL:       c_uint = 0x0B95 as c_uint;
+const STENCIL_PASS_DEPTH_PASS:       c_uint = 0x0B96 as c_uint;
+const STENCIL_REF:                   c_uint = 0x0B97 as c_uint;
+const STENCIL_VALUE_MASK:            c_uint = 0x0B93 as c_uint;
+const STENCIL_WRITEMASK:             c_uint = 0x0B98 as c_uint;
+const STENCIL_BACK_FUNC:             c_uint = 0x8800 as c_uint;
+const STENCIL_BACK_FAIL:             c_uint = 0x8801 as c_uint;
+const STENCIL_BACK_PASS_DEPTH_FAIL:  c_uint = 0x8802 as c_uint;
+const STENCIL_BACK_PASS_DEPTH_PASS:  c_uint = 0x8803 as c_uint;
+const STENCIL_BACK_REF:              c_uint = 0x8CA3 as c_uint;
+const STENCIL_BACK_VALUE_MASK:       c_uint = 0x8CA4 as c_uint;
+const STENCIL_BACK_WRITEMASK:        c_uint = 0x8CA5 as c_uint;
+const VIEWPORT:                      c_uint = 0x0BA2 as c_uint;
+const SCISSOR_BOX:                   c_uint = 0x0C10 as c_uint;
+/*      SCISSOR_TEST */
+const COLOR_CLEAR_VALUE:             c_uint = 0x0C22 as c_uint;
+const COLOR_WRITEMASK:               c_uint = 0x0C23 as c_uint;
+const UNPACK_ALIGNMENT:              c_uint = 0x0CF5 as c_uint;
+const PACK_ALIGNMENT:                c_uint = 0x0D05 as c_uint;
+const MAX_TEXTURE_SIZE:              c_uint = 0x0D33 as c_uint;
+const MAX_VIEWPORT_DIMS:             c_uint = 0x0D3A as c_uint;
+const SUBPIXEL_BITS:                 c_uint = 0x0D50 as c_uint;
+const RED_BITS:                      c_uint = 0x0D52 as c_uint;
+const GREEN_BITS:                    c_uint = 0x0D53 as c_uint;
+const BLUE_BITS:                     c_uint = 0x0D54 as c_uint;
+const ALPHA_BITS:                    c_uint = 0x0D55 as c_uint;
+const DEPTH_BITS:                    c_uint = 0x0D56 as c_uint;
+const STENCIL_BITS:                  c_uint = 0x0D57 as c_uint;
+const POLYGON_OFFSET_UNITS:          c_uint = 0x2A00 as c_uint;
+/*      POLYGON_OFFSET_FILL */
+const POLYGON_OFFSET_FACTOR:         c_uint = 0x8038 as c_uint;
+const TEXTURE_BINDING_2D:            c_uint = 0x8069 as c_uint;
+const SAMPLE_BUFFERS:                c_uint = 0x80A8 as c_uint;
+const SAMPLES:                       c_uint = 0x80A9 as c_uint;
+const SAMPLE_COVERAGE_VALUE:         c_uint = 0x80AA as c_uint;
+const SAMPLE_COVERAGE_INVERT:        c_uint = 0x80AB as c_uint;
+
 /* PixelFormat */
 const DEPTH_COMPONENT: c_uint = 0x1902 as c_uint;
 const ALPHA:           c_uint = 0x1906 as c_uint;
@@ -272,6 +322,10 @@ fn get_uniform_location(program: GLuint, name: ~str) -> c_int unsafe {
 
 fn link_program(program: GLuint) {
     ret ll::glLinkProgram(program);
+}
+
+fn pixel_store_i(pname: GLenum, param: GLint) unsafe {
+    ll::glPixelStorei(pname, param);
 }
 
 fn shader_source(shader: GLuint, strings: ~[~[u8]]) unsafe {
