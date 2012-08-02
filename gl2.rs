@@ -580,9 +580,9 @@ fn glScissor(++x: GLint, ++y: GLint, ++width: GLsizei, ++height: GLsizei);
 
 fn glShaderSource(++shader: GLuint, ++count: GLsizei, ++string: **GLchar, ++length: *GLint);
 
-fn glStencilFunc(++func: GLenum, ++ref: GLint, ++mask: GLuint);
+fn glStencilFunc(++func: GLenum, ++reference: GLint, ++mask: GLuint);
 
-fn glStencilFuncSeparate(++face: GLenum, ++func: GLenum, ++ref: GLint, ++mask: GLuint);
+fn glStencilFuncSeparate(++face: GLenum, ++func: GLenum, ++reference: GLint, ++mask: GLuint);
 
 fn glStencilMask(++mask: GLuint);
 
