@@ -238,24 +238,24 @@ fn compile_shader(shader: GLuint) {
 }
 
 fn create_program() -> GLuint {
-    ret ll::glCreateProgram();
+    return ll::glCreateProgram();
 }
 
 fn create_shader(shader_type: GLenum) -> GLuint {
-    ret ll::glCreateShader(shader_type);
+    return ll::glCreateShader(shader_type);
 }
 
 fn delete_textures(textures: &[GLuint]) unsafe {
-    ret ll::glDeleteTextures(textures.len() as GLsizei, to_ptr_slice(textures));
+    return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr_slice(textures));
 }
 
 fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
-    ret ll::glDrawArrays(mode, first, count);
+    return ll::glDrawArrays(mode, first, count);
 }
 
 fn draw_elements(mode: GLenum, element_type: GLenum, indices: ~[u8]) unsafe {
-    ret ll::glDrawElements(mode, indices.len() as GLsizei, element_type,
-                           to_ptr(indices) as *c_void);
+    return ll::glDrawElements(mode, indices.len() as GLsizei, element_type,
+                              to_ptr(indices) as *c_void);
 }
 
 fn enable(cap: GLenum) {
@@ -267,38 +267,38 @@ fn enable_vertex_attrib_array(index: GLuint) {
 }
 
 fn finish() {
-    ret ll::glFinish();
+    return ll::glFinish();
 }
 
 fn flush() {
-    ret ll::glFlush();
+    return ll::glFlush();
 }
 
 fn gen_buffers(n: GLsizei) -> ~[GLuint] unsafe {
     let result = from_elem(n as uint, 0 as GLuint);
     ll::glGenBuffers(n, to_ptr(result));
-    ret result;
+    return result;
 }
 
 fn gen_textures(n: GLsizei) -> ~[GLuint] unsafe {
     let result = from_elem(n as uint, 0 as GLuint);
     ll::glGenTextures(n, to_ptr(result));
-    ret result;
+    return result;
 }
 
 fn get_attrib_location(program: GLuint, name: ~str) -> c_int unsafe {
-    ret as_c_str(name, |name_bytes|
+    return as_c_str(name, |name_bytes|
         ll::glGetAttribLocation(program, name_bytes as *GLchar));
 }
 
 fn get_error() -> GLenum {
-    ret ll::glGetError();
+    return ll::glGetError();
 }
 
 fn get_program_iv(program: GLuint, pname: GLenum) -> GLint unsafe {
     let result: GLint = 0 as GLint;
     ll::glGetProgramiv(program, pname, addr_of(result));
-    ret result;
+    return result;
 }
 
 fn get_shader_info_log(shader: GLuint) -> ~str unsafe {
@@ -306,22 +306,22 @@ fn get_shader_info_log(shader: GLuint) -> ~str unsafe {
     let result_len: GLsizei = 0 as GLsizei;
     ll::glGetShaderInfoLog(shader, 1024 as GLsizei, addr_of(result_len),
                            to_ptr(result) as *GLchar);
-    ret from_bytes(result);
+    return from_bytes(result);
 }
 
 fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint unsafe {
     let result: GLint = 0 as GLint;
     ll::glGetShaderiv(shader, pname, addr_of(result));
-    ret result;
+    return result;
 }
 
 fn get_uniform_location(program: GLuint, name: ~str) -> c_int unsafe {
-    ret as_c_str(name, |name_bytes|
-        ll::glGetUniformLocation(program, name_bytes as *GLchar));
+    return as_c_str(name, |name_bytes|
+           ll::glGetUniformLocation(program, name_bytes as *GLchar));
 }
 
 fn link_program(program: GLuint) {
-    ret ll::glLinkProgram(program);
+    return ll::glLinkProgram(program);
 }
 
 fn pixel_store_i(pname: GLenum, param: GLint) unsafe {
