@@ -6,4 +6,6 @@ use std;
 
 mod gl2;
 
+#[cfg(target_os="macos")]
+mod cgl;
 
