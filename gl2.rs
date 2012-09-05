@@ -340,7 +340,7 @@ fn shader_source(shader: GLuint, strings: ~[~[u8]]) unsafe {
 // FIXME: Does not verify buffer size -- unsafe!
 fn tex_image_2d(target: GLenum, level: GLint, internal_format: GLint, width: GLsizei,
                 height: GLsizei, border: GLint, format: GLenum, ty: GLenum, data: ~[u8]) unsafe {
-    let pdata = reinterpret_cast(to_ptr(data));
+    let pdata = reinterpret_cast(&to_ptr(data));
     ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty, pdata);
 }
 
@@ -364,7 +364,7 @@ fn use_program(program: GLuint) {
 fn vertex_attrib_pointer_f32(index: GLuint, size: GLint, normalized: bool,
                              stride: GLsizei, offset: GLuint) unsafe {
     ll::glVertexAttribPointer(index, size, FLOAT, normalized as GLboolean,
-                              stride, reinterpret_cast(offset as uint));
+                              stride, reinterpret_cast(&(offset as uint)));
 }
 
 fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
