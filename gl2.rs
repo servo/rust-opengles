@@ -5,7 +5,7 @@ import libc::types::common::c99::*;
 import ptr::addr_of;
 import str::{as_c_str, from_bytes};
 import sys::size_of;
-import unsafe::reinterpret_cast;
+import unsafe::{reinterpret_cast, transmute};
 import vec::from_elem;
 import vec::unsafe::{to_ptr, to_ptr_slice};
 
@@ -107,6 +107,10 @@ const RGB:             c_uint = 0x1907 as c_uint;
 const RGBA:            c_uint = 0x1908 as c_uint;
 
 const BGRA:            c_uint = 0x80e1 as c_uint;   // NB: Not OpenGL ES!
+const RGBA8:           c_uint = 0x8058 as c_uint;   // NB: Not OpenGL ES!
+
+/* Packed Pixels */
+const UNSIGNED_INT_8_8_8_8_REV: c_uint = 0x8367 as c_uint; // NB: Not OpenGL ES!
 
 /* Shaders */
 const FRAGMENT_SHADER:                  c_uint = 0x8B30 as c_uint;
@@ -160,6 +164,17 @@ const TEXTURE_WRAP_T:     c_uint = 0x2803 as c_uint;
 const REPEAT:          c_uint = 0x2901 as c_uint;
 const CLAMP_TO_EDGE:   c_uint = 0x812F as c_uint;
 const MIRRORED_REPEAT: c_uint = 0x8370 as c_uint;
+
+const COLOR_ATTACHMENT0: c_uint = 0x8CE0 as c_uint;
+
+const FRAMEBUFFER_COMPLETE: c_uint = 0x8CD5 as c_uint;
+
+// Framebuffer Object
+const FRAMEBUFFER:  c_uint = 0x8D40 as c_uint;
+const RENDERBUFFER: c_uint = 0x8D41 as c_uint;
+
+// Extensions
+const TEXTURE_RECTANGLE_ARB: c_uint = 0x84F5 as c_uint; // NB: Not OpenGL ES!
 
 // Types
 
@@ -215,6 +230,10 @@ fn bind_buffer(target: GLenum, buffer: GLuint) {
     ll::glBindBuffer(target, buffer);
 }
 
+fn bind_framebuffer(target: GLenum, framebuffer: GLuint) {
+    ll::glBindFramebuffer(target, framebuffer);
+}
+
 fn bind_texture(target: GLenum, texture: GLuint) {
     ll::glBindTexture(target, texture);
 }
@@ -223,6 +242,10 @@ fn bind_texture(target: GLenum, texture: GLuint) {
 fn buffer_data<T>(target: GLenum, data: ~[T], usage: GLenum) unsafe {
     ll::glBufferData(target, (data.len() * size_of::<T>()) as GLsizeiptr,
                      to_ptr(data) as *GLvoid, usage);
+}
+
+fn check_framebuffer_status(target: GLenum) -> GLenum {
+    ll::glCheckFramebufferStatus(target)
 }
 
 fn clear(mask: GLbitfield) {
@@ -274,10 +297,23 @@ fn flush() {
     return ll::glFlush();
 }
 
+fn framebuffer_texture_2d(target: GLenum, attachment: GLenum, textarget: GLenum, texture: GLuint,
+                          level: GLint) {
+    ll::glFramebufferTexture2D(target, attachment, textarget, texture, level);
+}
+
 fn gen_buffers(n: GLsizei) -> ~[GLuint] unsafe {
     let result = from_elem(n as uint, 0 as GLuint);
     ll::glGenBuffers(n, to_ptr(result));
     return result;
+}
+
+fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
+    unsafe {
+        let result = from_elem(n as uint, 0);
+        ll::glGenFramebuffers(n, to_ptr(result));
+        return result;
+    }
 }
 
 fn gen_textures(n: GLsizei) -> ~[GLuint] unsafe {
@@ -339,9 +375,23 @@ fn shader_source(shader: GLuint, strings: ~[~[u8]]) unsafe {
 
 // FIXME: Does not verify buffer size -- unsafe!
 fn tex_image_2d(target: GLenum, level: GLint, internal_format: GLint, width: GLsizei,
-                height: GLsizei, border: GLint, format: GLenum, ty: GLenum, data: ~[u8]) unsafe {
-    let pdata = reinterpret_cast(&to_ptr(data));
-    ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty, pdata);
+                height: GLsizei, border: GLint, format: GLenum, ty: GLenum,
+                opt_data: Option<&[u8]>) {
+    match opt_data {
+        Some(data) => {
+            unsafe {
+                let pdata = transmute(vec::unsafe::to_ptr_slice(data));
+                ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
+                                 pdata);
+            }
+        }
+        None => {
+            unsafe {
+                ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
+                                 ptr::null());
+            }
+        }
+    }
 }
 
 fn tex_parameter_i(target: GLenum, pname: GLenum, param: GLint) {
