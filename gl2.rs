@@ -7,7 +7,7 @@ use str::{as_c_str, from_bytes};
 use sys::size_of;
 use unsafe::{reinterpret_cast, transmute};
 use vec::from_elem;
-use vec::unsafe::{to_ptr, to_ptr_slice};
+use vec::raw::to_ptr;
 
 // Linking
 #[nolink]
@@ -269,7 +269,7 @@ fn create_shader(shader_type: GLenum) -> GLuint {
 }
 
 fn delete_textures(textures: &[GLuint]) unsafe {
-    return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr_slice(textures));
+    return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
 }
 
 fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
@@ -380,7 +380,7 @@ fn tex_image_2d(target: GLenum, level: GLint, internal_format: GLint, width: GLs
     match opt_data {
         Some(data) => {
             unsafe {
-                let pdata = transmute(vec::unsafe::to_ptr_slice(data));
+                let pdata = transmute(to_ptr(data));
                 ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
                                  pdata);
             }
