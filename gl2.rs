@@ -2,10 +2,10 @@
 
 use libc::*;
 use libc::types::common::c99::*;
+use cast::{reinterpret_cast, transmute};
 use ptr::addr_of;
 use str::{as_c_str, from_bytes};
 use sys::size_of;
-use unsafe::{reinterpret_cast, transmute};
 use vec::from_elem;
 use vec::raw::to_ptr;
 
