@@ -4,8 +4,8 @@
 
 extern mod std;
 
-mod gl2;
+pub mod gl2;
 
 #[cfg(target_os="macos")]
-mod cgl;
+pub mod cgl;
 
