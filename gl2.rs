@@ -3,7 +3,7 @@
 use libc::*;
 use libc::types::common::c99::*;
 use cast::{reinterpret_cast, transmute};
-use ptr::addr_of;
+use ptr::to_unsafe_ptr;
 use str::{as_c_str, from_bytes};
 use sys::size_of;
 use vec::from_elem;
@@ -334,21 +334,23 @@ pub fn get_error() -> GLenum {
 
 pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint unsafe {
     let result: GLint = 0 as GLint;
-    ll::glGetProgramiv(program, pname, addr_of(result));
+    ll::glGetProgramiv(program, pname, to_unsafe_ptr(&result));
     return result;
 }
 
 pub fn get_shader_info_log(shader: GLuint) -> ~str unsafe {
     let result = from_elem(1024u, 0u8);
     let result_len: GLsizei = 0 as GLsizei;
-    ll::glGetShaderInfoLog(shader, 1024 as GLsizei, addr_of(result_len),
+    ll::glGetShaderInfoLog(shader,
+                           1024 as GLsizei,
+                           to_unsafe_ptr(&result_len),
                            to_ptr(result) as *GLchar);
     return from_bytes(result);
 }
 
 pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint unsafe {
     let result: GLint = 0 as GLint;
-    ll::glGetShaderiv(shader, pname, addr_of(result));
+    ll::glGetShaderiv(shader, pname, to_unsafe_ptr(&result));
     return result;
 }
 
