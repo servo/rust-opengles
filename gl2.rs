@@ -216,7 +216,7 @@ pub type GLsizeiptr = ssize_t;
 
 // Helper functions
 
-pub fn destroy<T>(-_x: T) {
+pub fn destroy<T>(_x: T) {
     // Just let the object drop.
 }
 
