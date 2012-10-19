@@ -174,8 +174,9 @@ pub const FRAMEBUFFER:  c_uint = 0x8D40 as c_uint;
 pub const RENDERBUFFER: c_uint = 0x8D41 as c_uint;
 
 // Extensions
-pub const TEXTURE_RECTANGLE_ARB: c_uint = 0x84F5 as c_uint;
-    // NB: Not OpenGL ES!
+pub const TEXTURE_RECTANGLE_ARB: c_uint = 0x84F5 as c_uint;         // NB: Not OpenGL ES!
+
+pub const UNPACK_CLIENT_STORAGE_APPLE: c_uint = 0x85B2 as c_uint;   // NB: Not OpenGL ES!
 
 // Types
 
