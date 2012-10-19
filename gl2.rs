@@ -100,6 +100,9 @@ pub const SAMPLES:                       c_uint = 0x80A9 as c_uint;
 pub const SAMPLE_COVERAGE_VALUE:         c_uint = 0x80AA as c_uint;
 pub const SAMPLE_COVERAGE_INVERT:        c_uint = 0x80AB as c_uint;
 
+/* GetTarget */
+pub const UNPACK_ROW_LENGTH: c_uint = 0x0CF2 as c_uint;
+
 /* PixelFormat */
 pub const DEPTH_COMPONENT: c_uint = 0x1902 as c_uint;
 pub const ALPHA:           c_uint = 0x1906 as c_uint;
@@ -177,6 +180,10 @@ pub const RENDERBUFFER: c_uint = 0x8D41 as c_uint;
 pub const TEXTURE_RECTANGLE_ARB: c_uint = 0x84F5 as c_uint;         // NB: Not OpenGL ES!
 
 pub const UNPACK_CLIENT_STORAGE_APPLE: c_uint = 0x85B2 as c_uint;   // NB: Not OpenGL ES!
+pub const TEXTURE_STORAGE_HINT_APPLE: c_uint = 0x85BC as c_uint;    // NB: Not OpenGL ES!
+pub const STORAGE_CACHED_APPLE: c_uint = 0x85BE as c_uint;          // NB: Not OpenGL ES!
+pub const STORAGE_SHARED_APPLE: c_uint = 0x85BF as c_uint;          // NB: Not OpenGL ES!
+
 
 // Types
 
@@ -241,7 +248,7 @@ pub fn bind_texture(target: GLenum, texture: GLuint) {
 }
 
 // FIXME: There should be some type-safe wrapper for this...
-pub fn buffer_data<T>(target: GLenum, data: ~[T], usage: GLenum) unsafe {
+pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) unsafe {
     ll::glBufferData(target, (data.len() * size_of::<T>()) as GLsizeiptr,
                      to_ptr(data) as *GLvoid, usage);
 }
@@ -425,6 +432,13 @@ pub fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
     ll::glViewport(x, y, width, height);
 }
 
+// Apple extensions
+#[cfg(target_os="macos")]
+pub mod apple {
+    pub unsafe fn texture_range(target: GLenum, buffer: &[u8]) {
+        glTextureRangeAPPLE(target, buffer.len() as GLsizei, transmute(to_ptr(buffer)));
+    }
+}
 
 #[nolink]
 extern mod ll {
@@ -720,4 +734,14 @@ pub fn glVertexAttribPointer(++indx: GLuint, ++size: GLint, ++_type: GLenum, ++n
 
 pub fn glViewport(++x: GLint, ++y: GLint, ++width: GLsizei, ++height: GLsizei);
 
+
 }
+
+// Apple extensions
+#[cfg(target_os="macos")]
+extern {
+
+pub fn glTextureRangeAPPLE(++target: GLenum, ++length: GLsizei, ++pointer: *GLvoid);
+
+}
+
