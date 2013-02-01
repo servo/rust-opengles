@@ -33,6 +33,11 @@ pub extern { }
 #[link_args="-lGL"]
 pub extern { }
 
+#[nolink]
+#[cfg(target_os = "android")]
+#[link_args="-lGLESv2"]
+pub extern { }
+
 // Constants
 
 /* BeginMode */
@@ -408,8 +413,8 @@ pub fn bind_texture(target: GLenum, texture: GLuint) {
     }
 }
 
-#[cfg(not(target_os="macos"))]
-#[cfg(not(mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn bind_vertex_array(array: GLuint) {
     unsafe {
         glBindVertexArray(array);
@@ -585,16 +590,16 @@ pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices
     }
 }
 
-#[cfg(not(target_os="macos"))]
-#[cfg(not(mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn draw_arrays_instanced(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei) {
     unsafe {
         glDrawArraysInstanced(mode, first, count, primcount);
     }
 }
 
-#[cfg(not(target_os="macos"))]
-#[cfg(not(mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn draw_elements_instanced(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>, primcount: GLsizei) {
     unsafe {
         glDrawElementsInstanced(mode,
@@ -687,7 +692,8 @@ pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
     }
 }
 
-#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
@@ -830,6 +836,7 @@ pub fn pixel_store_i(pname: GLenum, param: GLint) {
     }
 }
 
+#[cfg(not(target_os = "android"))]
 pub fn polygon_mode(face: GLenum, mode: GLenum) {
     unsafe {
         glPolygonMode(face, mode);
@@ -1043,8 +1050,8 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
     }
 }
 
-#[cfg(not(target_os="macos"))]
-#[cfg(not(mac_10_6), not(mac_10_7))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6), not(mac_10_7))]
 pub fn vertex_attrib_divisor(index: GLuint, divisor: GLuint) {
     unsafe {
         glVertexAttribDivisor(index, divisor);
@@ -1088,7 +1095,8 @@ pub fn glBindRenderbuffer(target: GLenum, renderbuffer: GLuint);
 
 pub fn glBindTexture(target: GLenum, texture: GLuint);
 
-#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn glBindVertexArray(array: GLuint);
 
 pub fn glBlendColor(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf);
@@ -1163,12 +1171,12 @@ pub fn glDrawArrays(mode: GLenum, first: GLint, count: GLsizei);
 
 pub fn glDrawElements(mode: GLenum, count: GLsizei, _type: GLenum, indices: *GLvoid);
 
-#[cfg(not(target_os="macos"))]
-#[cfg(not(mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn glDrawArraysInstanced(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei);
 
-#[cfg(not(target_os="macos"))]
-#[cfg(not(mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn glDrawElementsInstanced(mode: GLenum, count: GLsizei, _type: GLenum, indices: *GLvoid, primcount: GLsizei);
 
 pub fn glEnable(cap: GLenum);
@@ -1195,7 +1203,8 @@ pub fn glGenRenderbuffers(n: GLsizei, renderbuffers: *GLuint);
 
 pub fn glGenTextures(n: GLsizei, textures: *GLuint);
 
-#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn glGenVertexArrays(n: GLsizei, arrays: *GLuint);
 
 pub fn glGetActiveAttrib(program: GLuint, index: GLuint, bufsize: GLsizei, length: *GLsizei, size: *GLint, _type: *GLenum, name: *GLchar);
@@ -1275,6 +1284,7 @@ pub fn glPixelStorei(pname: GLenum, param: GLint);
 
 pub fn glPolygonOffset(factor: GLfloat, units: GLfloat);
 
+#[cfg(not(target_os="android"))]
 pub fn glPolygonMode(face: GLenum, mode: GLenum);
 
 pub fn glReadPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, _type: GLenum, pixels: *mut GLvoid);
@@ -1377,8 +1387,8 @@ pub fn glVertexAttrib4fv(indx: GLuint, values: *GLfloat);
 
 pub fn glVertexAttribPointer(indx: GLuint, size: GLint, _type: GLenum, normalized: GLboolean, stride: GLsizei, ptr: *GLvoid);
 
-#[cfg(not(target_os="macos"))]
-#[cfg(not(mac_10_6), not(mac_10_7))]
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6), not(mac_10_7))]
 pub fn glVertexAttribDivisor(indx: GLuint, divisor: GLuint);
 
 pub fn glViewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei);
