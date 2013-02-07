@@ -258,8 +258,10 @@ pub fn bind_texture(target: GLenum, texture: GLuint) {
 // FIXME: There should be some type-safe wrapper for this...
 pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) {
     unsafe {
-        ll::glBufferData(target, (data.len() * size_of::<T>()) as GLsizeiptr,
-                         to_ptr(data) as *GLvoid, usage);
+        ll::glBufferData(target,
+                         (data.len() * size_of::<T>()) as GLsizeiptr,
+                         to_ptr(data) as *GLvoid,
+                         usage);
     }
 }
 
@@ -313,7 +315,9 @@ pub fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
 
 pub fn draw_elements(mode: GLenum, element_type: GLenum, indices: ~[u8]) {
     unsafe {
-        return ll::glDrawElements(mode, indices.len() as GLsizei, element_type,
+        return ll::glDrawElements(mode,
+                                  indices.len() as GLsizei,
+                                  element_type,
                                   to_ptr(indices) as *c_void);
     }
 }
@@ -342,8 +346,11 @@ pub fn flush() {
     }
 }
 
-pub fn framebuffer_texture_2d(target: GLenum, attachment: GLenum, textarget: GLenum,
-                              texture: GLuint, level: GLint) {
+pub fn framebuffer_texture_2d(target: GLenum,
+                              attachment: GLenum,
+                              textarget: GLenum,
+                              texture: GLuint,
+                              level: GLint) {
     unsafe {
         ll::glFramebufferTexture2D(target, attachment, textarget, texture, level);
     }
@@ -376,7 +383,7 @@ pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
 pub fn get_attrib_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
         return as_c_str(name, |name_bytes|
-                        ll::glGetAttribLocation(program, name_bytes as *GLchar));
+            ll::glGetAttribLocation(program, name_bytes as *GLchar));
     }
 }
 
@@ -416,8 +423,9 @@ pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
 
 pub fn get_uniform_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
-        return as_c_str(name, |name_bytes|
-                        ll::glGetUniformLocation(program, name_bytes as *GLchar));
+        do as_c_str(name) |name_bytes| {
+            ll::glGetUniformLocation(program, name_bytes as *GLchar)
+        }
     }
 }
 
@@ -445,8 +453,14 @@ pub fn shader_source(shader: GLuint, strings: ~[~[u8]]) {
 }
 
 // FIXME: Does not verify buffer size -- unsafe!
-pub fn tex_image_2d(target: GLenum, level: GLint, internal_format: GLint, width: GLsizei,
-                    height: GLsizei, border: GLint, format: GLenum, ty: GLenum,
+pub fn tex_image_2d(target: GLenum,
+                    level: GLint,
+                    internal_format: GLint,
+                    width: GLsizei,
+                    height: GLsizei,
+                    border: GLint,
+                    format: GLenum,
+                    ty: GLenum,
                     opt_data: Option<&[u8]>) {
     match opt_data {
         Some(data) => {
@@ -479,7 +493,9 @@ pub fn uniform_1i(location: GLint, x: GLint) {
 
 pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: ~[f32]) {
     unsafe {
-        ll::glUniformMatrix4fv(location, 1 as GLsizei, transpose as GLboolean,
+        ll::glUniformMatrix4fv(location,
+                               1 as GLsizei,
+                               transpose as GLboolean,
                                to_ptr(value) as *GLfloat);
     }
 }
@@ -490,11 +506,18 @@ pub fn use_program(program: GLuint) {
     }
 }
 
-pub fn vertex_attrib_pointer_f32(index: GLuint, size: GLint, normalized: bool, stride: GLsizei,
+pub fn vertex_attrib_pointer_f32(index: GLuint,
+                                 size: GLint,
+                                 normalized: bool,
+                                 stride: GLsizei,
                                  offset: GLuint) {
     unsafe {
-        ll::glVertexAttribPointer(index, size, FLOAT, normalized as GLboolean,
-                                  stride, reinterpret_cast(&(offset as uint)));
+        ll::glVertexAttribPointer(index,
+                                  size,
+                                  FLOAT,
+                                  normalized as GLboolean,
+                                  stride,
+                                  reinterpret_cast(&(offset as uint)));
     }
 }
 
