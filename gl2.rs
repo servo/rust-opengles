@@ -313,12 +313,12 @@ pub fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
     }
 }
 
-pub fn draw_elements(mode: GLenum, element_type: GLenum, indices: ~[u8]) {
+pub fn draw_elements(mode: GLenum, element_type: GLenum, indices: &[u8]) {
     unsafe {
         return ll::glDrawElements(mode,
                                   indices.len() as GLsizei,
                                   element_type,
-                                  to_ptr(indices) as *c_void);
+                                  cast::transmute(&indices[0]));
     }
 }
 
@@ -441,7 +441,7 @@ pub fn pixel_store_i(pname: GLenum, param: GLint) {
     }
 }
 
-pub fn shader_source(shader: GLuint, strings: ~[~[u8]]) {
+pub fn shader_source(shader: GLuint, strings: &[~[u8]]) {
     unsafe {
         let pointers = strings.map(|string| to_ptr(*string));
         let lengths = strings.map(|string| string.len() as GLint);
@@ -491,12 +491,12 @@ pub fn uniform_1i(location: GLint, x: GLint) {
     }
 }
 
-pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: ~[f32]) {
+pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: &[f32]) {
     unsafe {
         ll::glUniformMatrix4fv(location,
                                1 as GLsizei,
                                transpose as GLboolean,
-                               to_ptr(value) as *GLfloat);
+                               cast::transmute(&value[0]));
     }
 }
 
