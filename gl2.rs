@@ -35,7 +35,15 @@ pub const DEPTH_BUFFER_BIT:   c_uint = 0x00000100 as c_uint;
 pub const STENCIL_BUFFER_BIT: c_uint = 0x00000400 as c_uint;
 pub const COLOR_BUFFER_BIT:   c_uint = 0x00004000 as c_uint;
 
+/* Errors. */
 pub const NO_ERROR: c_uint = 0 as c_uint;
+pub const INVALID_ENUM: c_uint = 0x0500 as c_uint;
+pub const INVALID_VALUE: c_uint = 0x0501 as c_uint;
+pub const INVALID_OPERATION: c_uint = 0x0502 as c_uint;
+pub const STACK_OVERFLOW: c_uint = 0x0503 as c_uint;
+pub const STACK_UNDERFLOW: c_uint = 0x0504 as c_uint;
+pub const OUT_OF_MEMORY: c_uint = 0x0505 as c_uint;
+pub const INVALID_FRAMEBUFFER_OPERATION: c_uint = 0x0506 as c_uint;
 
 /* DataType */
 pub const BYTE:           c_uint = 0x1400 as c_uint;
