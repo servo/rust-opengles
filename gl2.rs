@@ -342,6 +342,12 @@ pub fn enable_vertex_attrib_array(index: GLuint) {
     }
 }
 
+pub fn disable_vertex_attrib_array(index: GLuint) {
+    unsafe {
+        ll::glDisableVertexAttribArray(index);
+    }
+}
+
 pub fn finish() {
     unsafe {
         return ll::glFinish();
