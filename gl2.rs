@@ -520,6 +520,12 @@ pub fn use_program(program: GLuint) {
     }
 }
 
+pub fn validate_program(program: GLuint) {
+    unsafe {
+        ll::glValidateProgram(program);
+    }
+}
+
 pub fn vertex_attrib_pointer_f32(index: GLuint,
                                  size: GLint,
                                  normalized: bool,
