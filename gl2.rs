@@ -273,6 +273,18 @@ pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) {
     }
 }
 
+// FIXME: As above
+// Note: offset is the element offset index, not byte offset
+pub fn buffer_sub_data<T>(target: GLenum, element_offset_index: uint, data: &[T]) {
+    unsafe {
+        let size = size_of::<T>();
+        ll::glBufferSubData(target,
+                            (element_offset_index * size) as GLintptr,
+                            (data.len() * size) as GLsizeiptr,
+                            to_ptr(data) as *GLvoid);
+    }
+}
+
 pub fn check_framebuffer_status(target: GLenum) -> GLenum {
     unsafe {
         ll::glCheckFramebufferStatus(target)
@@ -309,9 +321,21 @@ pub fn create_shader(shader_type: GLenum) -> GLuint {
     }
 }
 
+pub fn delete_shader(shader: GLuint) {
+    unsafe {
+        ll::glDeleteShader(shader);
+    }
+}
+
 pub fn delete_textures(textures: &[GLuint]) {
     unsafe {
         return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
+    }
+}
+
+pub fn detach_shader(program: GLuint, shader: GLuint) {
+    unsafe {
+        ll::glDetachShader(program, shader);
     }
 }
 
