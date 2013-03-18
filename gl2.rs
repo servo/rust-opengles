@@ -517,9 +517,33 @@ pub fn tex_parameter_i(target: GLenum, pname: GLenum, param: GLint) {
     }
 }
 
+pub fn uniform_1f(location: GLint, x: GLfloat) {
+    unsafe {
+        ll::glUniform1f(location, x);
+    }
+}
+
 pub fn uniform_1i(location: GLint, x: GLint) {
     unsafe {
         ll::glUniform1i(location, x);
+    }
+}
+
+pub fn uniform_2f(location: GLint, x: GLfloat, y: GLfloat) {
+    unsafe {
+        ll::glUniform2f(location, x, y);
+    }
+}
+
+pub fn uniform_3f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat) {
+    unsafe {
+        ll::glUniform3f(location, x, y, z);
+    }
+}
+
+pub fn uniform_4f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat, w: GLfloat) {
+    unsafe {
+        ll::glUniform4f(location, x, y, z, w);
     }
 }
 
