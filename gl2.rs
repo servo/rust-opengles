@@ -390,6 +390,12 @@ pub fn enable_vertex_attrib_array(index: GLuint) {
     }
 }
 
+pub fn disable_vertex_attrib_array(index: GLuint) {
+    unsafe {
+        ll::glDisableVertexAttribArray(index);
+    }
+}
+
 pub fn finish() {
     unsafe {
         return ll::glFinish();
@@ -589,6 +595,12 @@ pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: &[f32]) {
 pub fn use_program(program: GLuint) {
     unsafe {
         ll::glUseProgram(program);
+    }
+}
+
+pub fn validate_program(program: GLuint) {
+    unsafe {
+        ll::glValidateProgram(program);
     }
 }
 
