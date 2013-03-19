@@ -58,6 +58,10 @@ pub const FIXED:          c_uint = 0x140C as c_uint;
 /* EnableCap */
 pub const TEXTURE_2D: c_uint = 0x0DE1 as c_uint;
 
+/* FrontFaceDirection */
+pub const CW:  c_uint = 0x0900 as c_uint;
+pub const CCW: c_uint = 0x0901 as c_uint;
+
 /* GetPName */
 pub const LINE_WIDTH:                    c_uint = 0x0B21 as c_uint;
 pub const ALIASED_POINT_SIZE_RANGE:      c_uint = 0x846D as c_uint;
@@ -385,6 +389,12 @@ pub fn framebuffer_texture_2d(target: GLenum,
                               level: GLint) {
     unsafe {
         ll::glFramebufferTexture2D(target, attachment, textarget, texture, level);
+    }
+}
+
+pub fn front_face(mode: GLenum) {
+    unsafe {
+        ll::glFrontFace(mode);
     }
 }
 
