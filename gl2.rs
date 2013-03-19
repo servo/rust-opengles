@@ -56,7 +56,20 @@ pub const FLOAT:          c_uint = 0x1406 as c_uint;
 pub const FIXED:          c_uint = 0x140C as c_uint;
 
 /* EnableCap */
-pub const TEXTURE_2D: c_uint = 0x0DE1 as c_uint;
+pub const TEXTURE_2D:               c_uint = 0x0DE1 as c_uint;
+pub const CULL_FACE:                c_uint = 0x0B44 as c_uint;
+pub const BLEND:                    c_uint = 0x0BE2 as c_uint;
+pub const DITHER:                   c_uint = 0x0BD0 as c_uint;
+pub const STENCIL_TEST:             c_uint = 0x0B90 as c_uint;
+pub const DEPTH_TEST:               c_uint = 0x0B71 as c_uint;
+pub const SCISSOR_TEST:             c_uint = 0x0C11 as c_uint;
+pub const POLYGON_OFFSET_FILL:      c_uint = 0x8037 as c_uint;
+pub const SAMPLE_ALPHA_TO_COVERAGE: c_uint = 0x809E as c_uint;
+pub const SAMPLE_COVERAGE:          c_uint = 0x80A0 as c_uint;
+
+/* FrontFaceDirection */
+pub const CW:  c_uint = 0x0900 as c_uint;
+pub const CCW: c_uint = 0x0901 as c_uint;
 
 /* GetPName */
 pub const LINE_WIDTH:                    c_uint = 0x0B21 as c_uint;
@@ -160,6 +173,11 @@ pub const ELEMENT_ARRAY_BUFFER_BINDING: c_uint = 0x8895 as c_uint;
 pub const STREAM_DRAW:  c_uint = 0x88E0 as c_uint;
 pub const STATIC_DRAW:  c_uint = 0x88E4 as c_uint;
 pub const DYNAMIC_DRAW: c_uint = 0x88E8 as c_uint;
+
+/* CullFaceMode */
+pub const FRONT: c_uint =           0x0404 as c_uint;
+pub const BACK: c_uint =            0x0405 as c_uint;
+pub const FRONT_AND_BACK: c_uint =  0x0408 as c_uint;
 
 /* TextureMagFilter */
 pub const NEAREST: c_uint = 0x2600 as c_uint;
@@ -273,6 +291,18 @@ pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) {
     }
 }
 
+// FIXME: As above
+// Note: offset is the element offset index, not byte offset
+pub fn buffer_sub_data<T>(target: GLenum, element_offset_index: uint, data: &[T]) {
+    unsafe {
+        let size = size_of::<T>();
+        ll::glBufferSubData(target,
+                            (element_offset_index * size) as GLintptr,
+                            (data.len() * size) as GLsizeiptr,
+                            to_ptr(data) as *GLvoid);
+    }
+}
+
 pub fn check_framebuffer_status(target: GLenum) -> GLenum {
     unsafe {
         ll::glCheckFramebufferStatus(target)
@@ -309,9 +339,27 @@ pub fn create_shader(shader_type: GLenum) -> GLuint {
     }
 }
 
+pub fn cull_face(mode: GLenum) {
+    unsafe {
+        ll::glCullFace(mode);
+    }
+}
+
+pub fn delete_shader(shader: GLuint) {
+    unsafe {
+        ll::glDeleteShader(shader);
+    }
+}
+
 pub fn delete_textures(textures: &[GLuint]) {
     unsafe {
         return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
+    }
+}
+
+pub fn detach_shader(program: GLuint, shader: GLuint) {
+    unsafe {
+        ll::glDetachShader(program, shader);
     }
 }
 
@@ -361,6 +409,12 @@ pub fn framebuffer_texture_2d(target: GLenum,
                               level: GLint) {
     unsafe {
         ll::glFramebufferTexture2D(target, attachment, textarget, texture, level);
+    }
+}
+
+pub fn front_face(mode: GLenum) {
+    unsafe {
+        ll::glFrontFace(mode);
     }
 }
 
@@ -493,9 +547,33 @@ pub fn tex_parameter_i(target: GLenum, pname: GLenum, param: GLint) {
     }
 }
 
+pub fn uniform_1f(location: GLint, x: GLfloat) {
+    unsafe {
+        ll::glUniform1f(location, x);
+    }
+}
+
 pub fn uniform_1i(location: GLint, x: GLint) {
     unsafe {
         ll::glUniform1i(location, x);
+    }
+}
+
+pub fn uniform_2f(location: GLint, x: GLfloat, y: GLfloat) {
+    unsafe {
+        ll::glUniform2f(location, x, y);
+    }
+}
+
+pub fn uniform_3f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat) {
+    unsafe {
+        ll::glUniform3f(location, x, y, z);
+    }
+}
+
+pub fn uniform_4f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat, w: GLfloat) {
+    unsafe {
+        ll::glUniform4f(location, x, y, z, w);
     }
 }
 
