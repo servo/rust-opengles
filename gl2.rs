@@ -56,7 +56,16 @@ pub const FLOAT:          c_uint = 0x1406 as c_uint;
 pub const FIXED:          c_uint = 0x140C as c_uint;
 
 /* EnableCap */
-pub const TEXTURE_2D: c_uint = 0x0DE1 as c_uint;
+pub const TEXTURE_2D:               c_uint = 0x0DE1 as c_uint;
+pub const CULL_FACE:                c_uint = 0x0B44 as c_uint;
+pub const BLEND:                    c_uint = 0x0BE2 as c_uint;
+pub const DITHER:                   c_uint = 0x0BD0 as c_uint;
+pub const STENCIL_TEST:             c_uint = 0x0B90 as c_uint;
+pub const DEPTH_TEST:               c_uint = 0x0B71 as c_uint;
+pub const SCISSOR_TEST:             c_uint = 0x0C11 as c_uint;
+pub const POLYGON_OFFSET_FILL:      c_uint = 0x8037 as c_uint;
+pub const SAMPLE_ALPHA_TO_COVERAGE: c_uint = 0x809E as c_uint;
+pub const SAMPLE_COVERAGE:          c_uint = 0x80A0 as c_uint;
 
 /* FrontFaceDirection */
 pub const CW:  c_uint = 0x0900 as c_uint;
