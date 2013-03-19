@@ -165,6 +165,11 @@ pub const STREAM_DRAW:  c_uint = 0x88E0 as c_uint;
 pub const STATIC_DRAW:  c_uint = 0x88E4 as c_uint;
 pub const DYNAMIC_DRAW: c_uint = 0x88E8 as c_uint;
 
+/* CullFaceMode */
+pub const FRONT: c_uint =           0x0404 as c_uint;
+pub const BACK: c_uint =            0x0405 as c_uint;
+pub const FRONT_AND_BACK: c_uint =  0x0408 as c_uint;
+
 /* TextureMagFilter */
 pub const NEAREST: c_uint = 0x2600 as c_uint;
 pub const LINEAR:  c_uint = 0x2601 as c_uint;
@@ -322,6 +327,12 @@ pub fn create_program() -> GLuint {
 pub fn create_shader(shader_type: GLenum) -> GLuint {
     unsafe {
         return ll::glCreateShader(shader_type);
+    }
+}
+
+pub fn cull_face(mode: GLenum) {
+    unsafe {
+        ll::glCullFace(mode);
     }
 }
 
