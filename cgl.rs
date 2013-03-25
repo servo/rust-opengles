@@ -9,10 +9,10 @@ pub type CGLPixelFormatAttribute = c_int;
 pub type CGLPixelFormatObj = *c_void;
 pub type IOSurfaceRef = *c_void;
 
-pub const kCGLNoError: CGLError = 0;
+pub static kCGLNoError: CGLError = 0;
 
-pub const kCGLPFADoubleBuffer: CGLPixelFormatAttribute = 5;
-pub const kCGLPFACompliant: CGLPixelFormatAttribute = 83;
+pub static kCGLPFADoubleBuffer: CGLPixelFormatAttribute = 5;
+pub static kCGLPFACompliant: CGLPixelFormatAttribute = 83;
 
 #[nolink]
 extern {
