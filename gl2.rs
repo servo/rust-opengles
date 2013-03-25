@@ -158,6 +158,16 @@ pub static ACTIVE_ATTRIBUTE_MAX_LENGTH:      c_uint = 0x8B8A as c_uint;
 pub static SHADING_LANGUAGE_VERSION:         c_uint = 0x8B8C as c_uint;
 pub static CURRENT_PROGRAM:                  c_uint = 0x8B8D as c_uint;
 
+/* StencilFunction */
+pub static NEVER:    c_uint = 0x0200 as c_uint;
+pub static LESS:     c_uint = 0x0201 as c_uint;
+pub static EQUAL:    c_uint = 0x0202 as c_uint;
+pub static LEQUAL:   c_uint = 0x0203 as c_uint;
+pub static GREATER:  c_uint = 0x0204 as c_uint;
+pub static NOTEQUAL: c_uint = 0x0205 as c_uint;
+pub static GEQUAL:   c_uint = 0x0206 as c_uint;
+pub static ALWAYS:   c_uint = 0x0207 as c_uint;
+
 /* Shader Source */
 pub static COMPILE_STATUS:       c_uint = 0x8B81 as c_uint;
 pub static INFO_LOG_LENGTH:      c_uint = 0x8B84 as c_uint;
@@ -354,6 +364,18 @@ pub fn delete_shader(shader: GLuint) {
 pub fn delete_textures(textures: &[GLuint]) {
     unsafe {
         return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
+    }
+}
+
+pub fn depth_func(func: GLenum) {
+    unsafe {
+        ll::glDepthFunc(func);
+    }
+}
+
+pub fn depth_mask(flag: bool) {
+    unsafe {
+        ll::glDepthMask(flag as GLboolean);
     }
 }
 
