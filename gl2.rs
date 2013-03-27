@@ -199,6 +199,41 @@ pub static TEXTURE_MIN_FILTER: c_uint = 0x2801 as c_uint;
 pub static TEXTURE_WRAP_S:     c_uint = 0x2802 as c_uint;
 pub static TEXTURE_WRAP_T:     c_uint = 0x2803 as c_uint;
 
+/* TextureUnit */
+pub static TEXTURE0:       c_uint = 0x84C0 as c_uint;
+pub static TEXTURE1:       c_uint = 0x84C1 as c_uint;
+pub static TEXTURE2:       c_uint = 0x84C2 as c_uint;
+pub static TEXTURE3:       c_uint = 0x84C3 as c_uint;
+pub static TEXTURE4:       c_uint = 0x84C4 as c_uint;
+pub static TEXTURE5:       c_uint = 0x84C5 as c_uint;
+pub static TEXTURE6:       c_uint = 0x84C6 as c_uint;
+pub static TEXTURE7:       c_uint = 0x84C7 as c_uint;
+pub static TEXTURE8:       c_uint = 0x84C8 as c_uint;
+pub static TEXTURE9:       c_uint = 0x84C9 as c_uint;
+pub static TEXTURE10:      c_uint = 0x84CA as c_uint;
+pub static TEXTURE11:      c_uint = 0x84CB as c_uint;
+pub static TEXTURE12:      c_uint = 0x84CC as c_uint;
+pub static TEXTURE13:      c_uint = 0x84CD as c_uint;
+pub static TEXTURE14:      c_uint = 0x84CE as c_uint;
+pub static TEXTURE15:      c_uint = 0x84CF as c_uint;
+pub static TEXTURE16:      c_uint = 0x84D0 as c_uint;
+pub static TEXTURE17:      c_uint = 0x84D1 as c_uint;
+pub static TEXTURE18:      c_uint = 0x84D2 as c_uint;
+pub static TEXTURE19:      c_uint = 0x84D3 as c_uint;
+pub static TEXTURE20:      c_uint = 0x84D4 as c_uint;
+pub static TEXTURE21:      c_uint = 0x84D5 as c_uint;
+pub static TEXTURE22:      c_uint = 0x84D6 as c_uint;
+pub static TEXTURE23:      c_uint = 0x84D7 as c_uint;
+pub static TEXTURE24:      c_uint = 0x84D8 as c_uint;
+pub static TEXTURE25:      c_uint = 0x84D9 as c_uint;
+pub static TEXTURE26:      c_uint = 0x84DA as c_uint;
+pub static TEXTURE27:      c_uint = 0x84DB as c_uint;
+pub static TEXTURE28:      c_uint = 0x84DC as c_uint;
+pub static TEXTURE29:      c_uint = 0x84DD as c_uint;
+pub static TEXTURE30:      c_uint = 0x84DE as c_uint;
+pub static TEXTURE31:      c_uint = 0x84DF as c_uint;
+pub static ACTIVE_TEXTURE: c_uint = 0x84E0 as c_uint;
+
 /* TextureWrapMode */
 pub static REPEAT:          c_uint = 0x2901 as c_uint;
 pub static CLAMP_TO_EDGE:   c_uint = 0x812F as c_uint;
@@ -266,6 +301,12 @@ pub fn destroy<T>(_x: T) {
 
 
 // Exposed Rust API using Rust naming conventions
+
+pub fn active_texture(texture: GLenum) {
+    unsafe {
+        ll::glActiveTexture(texture);
+    }
+}
 
 pub fn attach_shader(program: GLuint, shader: GLuint) {
     unsafe {
