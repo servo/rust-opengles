@@ -355,6 +355,30 @@ pub fn cull_face(mode: GLenum) {
     }
 }
 
+pub fn delete_buffers(buffers: &[GLuint]) {
+    unsafe {
+        ll::glDeleteBuffers(buffers.len() as GLsizei, to_ptr(buffers));
+    }
+}
+
+pub fn delete_frame_buffers(frame_buffers: &[GLuint]) {
+    unsafe {
+        ll::glDeleteFramebuffers(frame_buffers.len() as GLsizei, to_ptr(frame_buffers));
+    }
+}
+
+pub fn delete_program(program: GLuint) {
+    unsafe {
+        ll::glDeleteProgram(program);
+    }
+}
+
+pub fn delete_render_buffers(render_buffers: &[GLuint]) {
+    unsafe {
+        ll::glDeleteRenderbuffers(render_buffers.len() as GLsizei, to_ptr(render_buffers));
+    }
+}
+
 pub fn delete_shader(shader: GLuint) {
     unsafe {
         ll::glDeleteShader(shader);
