@@ -629,8 +629,8 @@ pub fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
 #[cfg(target_os="macos")]
 pub mod apple {
     use super::{GLenum, GLsizei};
-    use cast::transmute;
-    use vec::raw::to_ptr;
+    use core::cast::transmute;
+    use core::vec::raw::to_ptr;
 
     pub unsafe fn texture_range(target: GLenum, buffer: &[u8]) {
         super::glTextureRangeAPPLE(target, buffer.len() as GLsizei, transmute(to_ptr(buffer)));

@@ -1,7 +1,7 @@
 // Mac-specific OpenGL bindings.
 
 use gl2::{GLenum, GLint, GLsizei, GLuint};
-use libc::*;
+use core::libc::*;
 
 pub type CGLContextObj = *c_void;
 pub type CGLError = c_int;
