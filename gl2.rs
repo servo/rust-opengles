@@ -619,6 +619,21 @@ pub fn vertex_attrib_pointer_f32(index: GLuint,
     }
 }
 
+pub fn vertex_attrib_pointer_u8(index: GLuint,
+                                 size: GLint,
+                                 normalized: bool,
+                                 stride: GLsizei,
+                                 offset: GLuint) {
+    unsafe {
+        ll::glVertexAttribPointer(index,
+                                  size,
+                                  UNSIGNED_BYTE,
+                                  normalized as GLboolean,
+                                  stride,
+                                  reinterpret_cast(&(offset as uint)));
+    }
+}
+
 pub fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
     unsafe {
         ll::glViewport(x, y, width, height);
