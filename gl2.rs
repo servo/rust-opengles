@@ -67,6 +67,16 @@ pub static POLYGON_OFFSET_FILL:      c_uint = 0x8037 as c_uint;
 pub static SAMPLE_ALPHA_TO_COVERAGE: c_uint = 0x809E as c_uint;
 pub static SAMPLE_COVERAGE:          c_uint = 0x80A0 as c_uint;
 
+/* Depth buffer */
+pub static NEVER:             c_uint = 0x0200 as c_uint;
+pub static LESS:              c_uint = 0x0201 as c_uint;
+pub static EQUAL:             c_uint = 0x0202 as c_uint;
+pub static LEQUAL:            c_uint = 0x0203 as c_uint;
+pub static GREATER:           c_uint = 0x0204 as c_uint;
+pub static NOTEQUAL:          c_uint = 0x0205 as c_uint;
+pub static GEQUAL:            c_uint = 0x0206 as c_uint;
+pub static ALWAYS:            c_uint = 0x0207 as c_uint;
+
 /* FrontFaceDirection */
 pub static CW:  c_uint = 0x0900 as c_uint;
 pub static CCW: c_uint = 0x0901 as c_uint;
@@ -319,6 +329,12 @@ pub fn clear_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclam
     unsafe {
         ll::glClearColor(red, green, blue, alpha);
     }
+}
+
+pub fn depth_func(func: GLenum) {
+  unsafe {
+      ll::glDepthFunc(func);
+  }
 }
 
 pub fn compile_shader(shader: GLuint) {
@@ -692,7 +708,7 @@ pub fn glClear(++mask: GLbitfield);
 pub fn glClearColor(++red: GLclampf, ++green: GLclampf, ++blue: GLclampf, ++alpha: GLclampf);
 
 // Unsupported on Mac:
-//fn glClearDepthf(++depth: GLclampf);
+pub fn glClearDepthf(++depth: GLclampf);
 
 pub fn glClearStencil(++s: GLint);
 
