@@ -35,6 +35,42 @@ pub static DEPTH_BUFFER_BIT:   c_uint = 0x00000100 as c_uint;
 pub static STENCIL_BUFFER_BIT: c_uint = 0x00000400 as c_uint;
 pub static COLOR_BUFFER_BIT:   c_uint = 0x00004000 as c_uint;
 
+/* BlendingFactorDest */
+pub static ZERO:                     c_uint = 0      as c_uint;
+pub static ONE:                      c_uint = 1      as c_uint;
+pub static SRC_COLOR:                c_uint = 0x0300 as c_uint;
+pub static ONE_MINUS_SRC_COLOR:      c_uint = 0x0301 as c_uint;
+pub static SRC_ALPHA:                c_uint = 0x0302 as c_uint;
+pub static ONE_MINUS_SRC_ALPHA:      c_uint = 0x0303 as c_uint;
+pub static DST_ALPHA:                c_uint = 0x0304 as c_uint;
+pub static ONE_MINUS_DST_ALPHA:      c_uint = 0x0305 as c_uint;
+
+/* BlendingFactorSrc */
+pub static DST_COLOR:                c_uint = 0x0306 as c_uint;
+pub static ONE_MINUS_DST_COLOR:      c_uint = 0x0307 as c_uint;
+pub static SRC_ALPHA_SATURATE:       c_uint = 0x0308 as c_uint;
+
+/* BlendEquationSeparate */
+pub static FUNC_ADD:                 c_uint = 0x8006 as c_uint;
+pub static BLEND_EQUATION:           c_uint = 0x8009 as c_uint;
+pub static BLEND_EQUATION_RGB:       c_uint = 0x8009 as c_uint;
+pub static BLEND_EQUATION_ALPHA:     c_uint = 0x883D as c_uint;
+
+/* BlendSubtract */
+pub static FUNC_SUBTRACT:            c_uint = 0x800A as c_uint;
+pub static FUNC_REVERSE_SUBTRACT:    c_uint = 0x800B as c_uint;
+
+/* Separate Blend Functions */
+pub static BLEND_DST_RGB:            c_uint = 0x80C8 as c_uint;
+pub static BLEND_SRC_RGB:            c_uint = 0x80C9 as c_uint;
+pub static BLEND_DST_ALPHA:          c_uint = 0x80CA as c_uint;
+pub static BLEND_SRC_ALPHA:          c_uint = 0x80CB as c_uint;
+pub static CONSTANT_COLOR:           c_uint = 0x8001 as c_uint;
+pub static ONE_MINUS_CONSTANT_COLOR: c_uint = 0x8002 as c_uint;
+pub static CONSTANT_ALPHA:           c_uint = 0x8003 as c_uint;
+pub static ONE_MINUS_CONSTANT_ALPHA: c_uint = 0x8004 as c_uint;
+pub static BLEND_COLOR:              c_uint = 0x8005 as c_uint;
+
 /* Errors. */
 pub static NO_ERROR: c_uint = 0 as c_uint;
 pub static INVALID_ENUM: c_uint = 0x0500 as c_uint;
@@ -329,6 +365,36 @@ pub fn bind_framebuffer(target: GLenum, framebuffer: GLuint) {
 pub fn bind_texture(target: GLenum, texture: GLuint) {
     unsafe {
         ll::glBindTexture(target, texture);
+    }
+}
+
+pub fn blend_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
+    unsafe {
+        ll::glBlendColor(red, green, blue, alpha);
+    }
+}
+
+pub fn blend_equation(mode: GLenum) {
+    unsafe {
+        ll::glBlendEquation(mode);
+    }
+}
+
+pub fn blend_equation_separate(mode_rgb: GLenum, mode_alpha: GLenum) {
+    unsafe {
+        ll::glBlendEquationSeparate(mode_rgb, mode_alpha);
+    }
+}
+
+pub fn blend_func(sfactor: GLenum, dfactor: GLenum) {
+    unsafe {
+        ll::glBlendFunc(sfactor, dfactor);
+    }
+}
+
+pub fn blend_func_separate(src_rgb: GLenum, dst_rgb: GLenum, src_alpha: GLenum, dst_alpha: GLenum) {
+    unsafe {
+        ll::glBlendFuncSeparate(src_rgb, dst_rgb, src_alpha, dst_alpha);
     }
 }
 
