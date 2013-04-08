@@ -35,6 +35,42 @@ pub static DEPTH_BUFFER_BIT:   c_uint = 0x00000100 as c_uint;
 pub static STENCIL_BUFFER_BIT: c_uint = 0x00000400 as c_uint;
 pub static COLOR_BUFFER_BIT:   c_uint = 0x00004000 as c_uint;
 
+/* BlendingFactorDest */
+pub static ZERO:                     c_uint = 0      as c_uint;
+pub static ONE:                      c_uint = 1      as c_uint;
+pub static SRC_COLOR:                c_uint = 0x0300 as c_uint;
+pub static ONE_MINUS_SRC_COLOR:      c_uint = 0x0301 as c_uint;
+pub static SRC_ALPHA:                c_uint = 0x0302 as c_uint;
+pub static ONE_MINUS_SRC_ALPHA:      c_uint = 0x0303 as c_uint;
+pub static DST_ALPHA:                c_uint = 0x0304 as c_uint;
+pub static ONE_MINUS_DST_ALPHA:      c_uint = 0x0305 as c_uint;
+
+/* BlendingFactorSrc */
+pub static DST_COLOR:                c_uint = 0x0306 as c_uint;
+pub static ONE_MINUS_DST_COLOR:      c_uint = 0x0307 as c_uint;
+pub static SRC_ALPHA_SATURATE:       c_uint = 0x0308 as c_uint;
+
+/* BlendEquationSeparate */
+pub static FUNC_ADD:                 c_uint = 0x8006 as c_uint;
+pub static BLEND_EQUATION:           c_uint = 0x8009 as c_uint;
+pub static BLEND_EQUATION_RGB:       c_uint = 0x8009 as c_uint;
+pub static BLEND_EQUATION_ALPHA:     c_uint = 0x883D as c_uint;
+
+/* BlendSubtract */
+pub static FUNC_SUBTRACT:            c_uint = 0x800A as c_uint;
+pub static FUNC_REVERSE_SUBTRACT:    c_uint = 0x800B as c_uint;
+
+/* Separate Blend Functions */
+pub static BLEND_DST_RGB:            c_uint = 0x80C8 as c_uint;
+pub static BLEND_SRC_RGB:            c_uint = 0x80C9 as c_uint;
+pub static BLEND_DST_ALPHA:          c_uint = 0x80CA as c_uint;
+pub static BLEND_SRC_ALPHA:          c_uint = 0x80CB as c_uint;
+pub static CONSTANT_COLOR:           c_uint = 0x8001 as c_uint;
+pub static ONE_MINUS_CONSTANT_COLOR: c_uint = 0x8002 as c_uint;
+pub static CONSTANT_ALPHA:           c_uint = 0x8003 as c_uint;
+pub static ONE_MINUS_CONSTANT_ALPHA: c_uint = 0x8004 as c_uint;
+pub static BLEND_COLOR:              c_uint = 0x8005 as c_uint;
+
 /* Errors. */
 pub static NO_ERROR: c_uint = 0 as c_uint;
 pub static INVALID_ENUM: c_uint = 0x0500 as c_uint;
@@ -158,6 +194,16 @@ pub static ACTIVE_ATTRIBUTE_MAX_LENGTH:      c_uint = 0x8B8A as c_uint;
 pub static SHADING_LANGUAGE_VERSION:         c_uint = 0x8B8C as c_uint;
 pub static CURRENT_PROGRAM:                  c_uint = 0x8B8D as c_uint;
 
+/* StencilFunction */
+pub static NEVER:    c_uint = 0x0200 as c_uint;
+pub static LESS:     c_uint = 0x0201 as c_uint;
+pub static EQUAL:    c_uint = 0x0202 as c_uint;
+pub static LEQUAL:   c_uint = 0x0203 as c_uint;
+pub static GREATER:  c_uint = 0x0204 as c_uint;
+pub static NOTEQUAL: c_uint = 0x0205 as c_uint;
+pub static GEQUAL:   c_uint = 0x0206 as c_uint;
+pub static ALWAYS:   c_uint = 0x0207 as c_uint;
+
 /* Shader Source */
 pub static COMPILE_STATUS:       c_uint = 0x8B81 as c_uint;
 pub static INFO_LOG_LENGTH:      c_uint = 0x8B84 as c_uint;
@@ -188,6 +234,41 @@ pub static TEXTURE_MAG_FILTER: c_uint = 0x2800 as c_uint;
 pub static TEXTURE_MIN_FILTER: c_uint = 0x2801 as c_uint;
 pub static TEXTURE_WRAP_S:     c_uint = 0x2802 as c_uint;
 pub static TEXTURE_WRAP_T:     c_uint = 0x2803 as c_uint;
+
+/* TextureUnit */
+pub static TEXTURE0:       c_uint = 0x84C0 as c_uint;
+pub static TEXTURE1:       c_uint = 0x84C1 as c_uint;
+pub static TEXTURE2:       c_uint = 0x84C2 as c_uint;
+pub static TEXTURE3:       c_uint = 0x84C3 as c_uint;
+pub static TEXTURE4:       c_uint = 0x84C4 as c_uint;
+pub static TEXTURE5:       c_uint = 0x84C5 as c_uint;
+pub static TEXTURE6:       c_uint = 0x84C6 as c_uint;
+pub static TEXTURE7:       c_uint = 0x84C7 as c_uint;
+pub static TEXTURE8:       c_uint = 0x84C8 as c_uint;
+pub static TEXTURE9:       c_uint = 0x84C9 as c_uint;
+pub static TEXTURE10:      c_uint = 0x84CA as c_uint;
+pub static TEXTURE11:      c_uint = 0x84CB as c_uint;
+pub static TEXTURE12:      c_uint = 0x84CC as c_uint;
+pub static TEXTURE13:      c_uint = 0x84CD as c_uint;
+pub static TEXTURE14:      c_uint = 0x84CE as c_uint;
+pub static TEXTURE15:      c_uint = 0x84CF as c_uint;
+pub static TEXTURE16:      c_uint = 0x84D0 as c_uint;
+pub static TEXTURE17:      c_uint = 0x84D1 as c_uint;
+pub static TEXTURE18:      c_uint = 0x84D2 as c_uint;
+pub static TEXTURE19:      c_uint = 0x84D3 as c_uint;
+pub static TEXTURE20:      c_uint = 0x84D4 as c_uint;
+pub static TEXTURE21:      c_uint = 0x84D5 as c_uint;
+pub static TEXTURE22:      c_uint = 0x84D6 as c_uint;
+pub static TEXTURE23:      c_uint = 0x84D7 as c_uint;
+pub static TEXTURE24:      c_uint = 0x84D8 as c_uint;
+pub static TEXTURE25:      c_uint = 0x84D9 as c_uint;
+pub static TEXTURE26:      c_uint = 0x84DA as c_uint;
+pub static TEXTURE27:      c_uint = 0x84DB as c_uint;
+pub static TEXTURE28:      c_uint = 0x84DC as c_uint;
+pub static TEXTURE29:      c_uint = 0x84DD as c_uint;
+pub static TEXTURE30:      c_uint = 0x84DE as c_uint;
+pub static TEXTURE31:      c_uint = 0x84DF as c_uint;
+pub static ACTIVE_TEXTURE: c_uint = 0x84E0 as c_uint;
 
 /* TextureWrapMode */
 pub static REPEAT:          c_uint = 0x2901 as c_uint;
@@ -257,6 +338,12 @@ pub fn destroy<T>(_x: T) {
 
 // Exposed Rust API using Rust naming conventions
 
+pub fn active_texture(texture: GLenum) {
+    unsafe {
+        ll::glActiveTexture(texture);
+    }
+}
+
 pub fn attach_shader(program: GLuint, shader: GLuint) {
     unsafe {
         ll::glAttachShader(program, shader);
@@ -278,6 +365,36 @@ pub fn bind_framebuffer(target: GLenum, framebuffer: GLuint) {
 pub fn bind_texture(target: GLenum, texture: GLuint) {
     unsafe {
         ll::glBindTexture(target, texture);
+    }
+}
+
+pub fn blend_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
+    unsafe {
+        ll::glBlendColor(red, green, blue, alpha);
+    }
+}
+
+pub fn blend_equation(mode: GLenum) {
+    unsafe {
+        ll::glBlendEquation(mode);
+    }
+}
+
+pub fn blend_equation_separate(mode_rgb: GLenum, mode_alpha: GLenum) {
+    unsafe {
+        ll::glBlendEquationSeparate(mode_rgb, mode_alpha);
+    }
+}
+
+pub fn blend_func(sfactor: GLenum, dfactor: GLenum) {
+    unsafe {
+        ll::glBlendFunc(sfactor, dfactor);
+    }
+}
+
+pub fn blend_func_separate(src_rgb: GLenum, dst_rgb: GLenum, src_alpha: GLenum, dst_alpha: GLenum) {
+    unsafe {
+        ll::glBlendFuncSeparate(src_rgb, dst_rgb, src_alpha, dst_alpha);
     }
 }
 
@@ -345,6 +462,30 @@ pub fn cull_face(mode: GLenum) {
     }
 }
 
+pub fn delete_buffers(buffers: &[GLuint]) {
+    unsafe {
+        ll::glDeleteBuffers(buffers.len() as GLsizei, to_ptr(buffers));
+    }
+}
+
+pub fn delete_frame_buffers(frame_buffers: &[GLuint]) {
+    unsafe {
+        ll::glDeleteFramebuffers(frame_buffers.len() as GLsizei, to_ptr(frame_buffers));
+    }
+}
+
+pub fn delete_program(program: GLuint) {
+    unsafe {
+        ll::glDeleteProgram(program);
+    }
+}
+
+pub fn delete_render_buffers(render_buffers: &[GLuint]) {
+    unsafe {
+        ll::glDeleteRenderbuffers(render_buffers.len() as GLsizei, to_ptr(render_buffers));
+    }
+}
+
 pub fn delete_shader(shader: GLuint) {
     unsafe {
         ll::glDeleteShader(shader);
@@ -354,6 +495,18 @@ pub fn delete_shader(shader: GLuint) {
 pub fn delete_textures(textures: &[GLuint]) {
     unsafe {
         return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
+    }
+}
+
+pub fn depth_func(func: GLenum) {
+    unsafe {
+        ll::glDepthFunc(func);
+    }
+}
+
+pub fn depth_mask(flag: bool) {
+    unsafe {
+        ll::glDepthMask(flag as GLboolean);
     }
 }
 
