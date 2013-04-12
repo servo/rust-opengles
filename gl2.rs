@@ -623,26 +623,6 @@ pub fn get_error() -> GLenum {
     }
 }
 
-pub fn get_program_info_log(shader: GLuint) -> ~str {
-    unsafe {
-        let result = from_elem(1024u, 0u8);
-        let result_len: GLsizei = 0 as GLsizei;
-        ll::glGetProgramInfoLog(shader,
-                               1024 as GLsizei,
-                               to_unsafe_ptr(&result_len),
-                               to_ptr(result) as *GLchar);
-        return from_bytes(result);
-    }
-}
-
-pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
-    unsafe {
-        let result: GLint = 0 as GLint;
-        ll::glGetProgramiv(program, pname, to_unsafe_ptr(&result));
-        return result;
-    }
-}
-
 pub fn get_program_info_log(program: GLuint) -> ~str {
     unsafe {
         let mut result = from_elem(1024u, 0u8);
@@ -653,6 +633,14 @@ pub fn get_program_info_log(program: GLuint) -> ~str {
                                to_ptr(result) as *GLchar);
         result.truncate((result_len - 1)as uint);
         return from_bytes(result);
+    }
+}
+
+pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
+    unsafe {
+        let result: GLint = 0 as GLint;
+        ll::glGetProgramiv(program, pname, to_unsafe_ptr(&result));
+        return result;
     }
 }
 
