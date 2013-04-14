@@ -171,6 +171,9 @@ pub static UNPACK_ROW_LENGTH: c_uint = 0x0CF2 as c_uint;
 
 /* PixelFormat */
 pub static DEPTH_COMPONENT: c_uint = 0x1902 as c_uint;
+pub static RED:             c_uint = 0x1903 as c_uint;
+pub static GREEN:           c_uint = 0x1904 as c_uint;
+pub static BLUE:            c_uint = 0x1905 as c_uint;
 pub static ALPHA:           c_uint = 0x1906 as c_uint;
 pub static RGB:             c_uint = 0x1907 as c_uint;
 pub static RGBA:            c_uint = 0x1908 as c_uint;
