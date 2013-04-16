@@ -549,6 +549,12 @@ pub fn enable(cap: GLenum) {
     }
 }
 
+pub fn disable(cap: GLenum) {
+    unsafe {
+        ll::glDisable(cap);
+    }
+}
+
 pub fn enable_vertex_attrib_array(index: GLuint) {
     unsafe {
         ll::glEnableVertexAttribArray(index);
@@ -721,6 +727,33 @@ pub fn tex_image_2d(target: GLenum,
             unsafe {
                 ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
                                  ptr::null());
+            }
+        }
+    }
+}
+
+// FIXME: Does not verify buffer size -- unsafe!
+pub fn tex_sub_image_2d(target: GLenum,
+                        level: GLint,
+                        xoffset: GLint,
+                        yoffset: GLint,
+                        width: GLsizei,
+                        height: GLsizei,
+                        format: GLenum,
+                        ty: GLenum,
+                        opt_data: Option<&[u8]>) {
+    match opt_data {
+        Some(data) => {
+            unsafe {
+                let pdata = transmute(to_ptr(data));
+                ll::glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
+                                   pdata);
+            }
+        }
+        None => {
+            unsafe {
+                ll::glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
+                                   ptr::null());
             }
         }
     }
