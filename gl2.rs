@@ -362,6 +362,14 @@ pub fn attach_shader(program: GLuint, shader: GLuint) {
     }
 }
 
+pub fn bind_attrib_location(program: GLuint, index: GLuint, name: ~str) {
+    unsafe {
+        do str::as_c_str(name) |cstr| {
+            ll::glBindAttribLocation(program, index, cstr);
+        }
+    }
+}
+
 pub fn bind_buffer(target: GLenum, buffer: GLuint) {
     unsafe {
         ll::glBindBuffer(target, buffer);
