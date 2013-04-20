@@ -696,45 +696,45 @@ pub fn get_uniform_location(program: GLuint, name: ~str) -> c_int {
     }
 }
 
-pub fn is_buffer(buffer: GLuint) -> GLboolean {
+pub fn is_buffer(buffer: GLuint) -> bool {
   unsafe {
-    ll::glIsBuffer(buffer)
+    ll::glIsBuffer(buffer) > 0
   }
 }
 
-pub fn is_enabled(cap: GLenum) -> GLboolean {
+pub fn is_enabled(cap: GLenum) -> bool {
   unsafe {
-    ll::glIsEnabled(cap)
+    ll::glIsEnabled(cap) > 0
   }
 }
 
-pub fn is_framebuffer(framebuffer: GLuint) -> GLboolean {
+pub fn is_framebuffer(framebuffer: GLuint) -> bool {
   unsafe {
-    ll::glIsFramebuffer(framebuffer)
+    ll::glIsFramebuffer(framebuffer) > 0
   }
 }
 
-pub fn is_program(program: GLuint) -> GLboolean {
+pub fn is_program(program: GLuint) -> bool {
   unsafe {
-    ll::glIsProgram(program)
+    ll::glIsProgram(program) > 0
   }
 }
 
-pub fn is_renderbuffer(renderbuffer: GLuint) -> GLboolean {
+pub fn is_renderbuffer(renderbuffer: GLuint) -> bool {
   unsafe {
-    ll::glIsRenderbuffer(renderbuffer)
+    ll::glIsRenderbuffer(renderbuffer) > 0
   }
 }
 
-pub fn is_shader(shader: GLuint) -> GLboolean {
+pub fn is_shader(shader: GLuint) -> bool {
   unsafe {
-    ll::glIsShader(shader)
+    ll::glIsShader(shader) > 0
   }
 }
 
-pub fn is_texture(texture: GLuint) -> GLboolean {
+pub fn is_texture(texture: GLuint) -> bool {
   unsafe {
-    ll::glIsTexture(texture)
+    ll::glIsTexture(texture) > 0
   }
 }
 
