@@ -682,6 +682,48 @@ pub fn get_uniform_location(program: GLuint, name: ~str) -> c_int {
     }
 }
 
+pub fn is_buffer(buffer: GLuint) -> GLboolean {
+  unsafe {
+    ll::glIsBuffer(buffer)
+  }
+}
+
+pub fn is_enabled(cap: GLenum) -> GLboolean {
+  unsafe {
+    ll::glIsEnabled(cap)
+  }
+}
+
+pub fn is_framebuffer(framebuffer: GLuint) -> GLboolean {
+  unsafe {
+    ll::glIsFramebuffer(framebuffer)
+  }
+}
+
+pub fn is_program(program: GLuint) -> GLboolean {
+  unsafe {
+    ll::glIsProgram(program)
+  }
+}
+
+pub fn is_renderbuffer(renderbuffer: GLuint) -> GLboolean {
+  unsafe {
+    ll::glIsRenderbuffer(renderbuffer)
+  }
+}
+
+pub fn is_shader(shader: GLuint) -> GLboolean {
+  unsafe {
+    ll::glIsShader(shader)
+  }
+}
+
+pub fn is_texture(texture: GLuint) -> GLboolean {
+  unsafe {
+    ll::glIsTexture(texture)
+  }
+}
+
 pub fn link_program(program: GLuint) {
     unsafe {
         return ll::glLinkProgram(program);
