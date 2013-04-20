@@ -14,6 +14,7 @@ use core::libc::types::common::c99::*;
 use core::cast::{reinterpret_cast, transmute};
 use core::ptr::to_unsafe_ptr;
 use core::str::{as_c_str, from_bytes};
+use core::str::raw::from_c_str;
 use core::sys::size_of;
 use core::vec::from_elem;
 use core::vec::raw::to_ptr;
@@ -215,6 +216,11 @@ pub static GREATER:  c_uint = 0x0204 as c_uint;
 pub static NOTEQUAL: c_uint = 0x0205 as c_uint;
 pub static GEQUAL:   c_uint = 0x0206 as c_uint;
 pub static ALWAYS:   c_uint = 0x0207 as c_uint;
+
+pub static VENDOR:     c_uint = 0x1F00 as c_uint;
+pub static RENDERER:   c_uint = 0x1F01 as c_uint;
+pub static VERSION:    c_uint = 0x1F02 as c_uint;
+pub static EXTENSIONS: c_uint = 0x1F03 as c_uint;
 
 /* Shader Source */
 pub static COMPILE_STATUS:       c_uint = 0x8B81 as c_uint;
@@ -677,6 +683,17 @@ pub fn get_shader_info_log(shader: GLuint) -> ~str {
                                to_ptr(result) as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
         return from_bytes(result);
+    }
+}
+
+pub fn get_string(which: GLenum) -> ~str {
+    unsafe {
+        let llstr = ll::glGetString(which);
+        if !ptr::is_null(llstr) {
+            return from_c_str(llstr as *c_char);
+        } else {
+            return ~"";
+        }
     }
 }
 
