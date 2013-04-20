@@ -362,6 +362,14 @@ pub fn attach_shader(program: GLuint, shader: GLuint) {
     }
 }
 
+pub fn bind_attrib_location(program: GLuint, index: GLuint, name: ~str) {
+    unsafe {
+        do str::as_c_str(name) |cstr| {
+            ll::glBindAttribLocation(program, index, cstr);
+        }
+    }
+}
+
 pub fn bind_buffer(target: GLenum, buffer: GLuint) {
     unsafe {
         ll::glBindBuffer(target, buffer);
@@ -534,12 +542,18 @@ pub fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
     }
 }
 
-pub fn draw_elements(mode: GLenum, element_type: GLenum, indices: &[u8]) {
+pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>) {
     unsafe {
         return ll::glDrawElements(mode,
-                                  indices.len() as GLsizei,
+                                  match indices {
+                                    Some(ref i) => cmp::min(count, i.len() as GLsizei),
+                                    None => count,
+                                  },
                                   element_type,
-                                  cast::transmute(&indices[0]));
+                                  match indices {
+                                    Some(ref i) => cast::transmute(&i[0]),
+                                    None => ptr::null(),
+                                  })
     }
 }
 
