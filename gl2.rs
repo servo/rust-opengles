@@ -654,7 +654,7 @@ pub fn get_program_info_log(program: GLuint) -> ~str {
                                1024 as GLsizei,
                                to_unsafe_ptr(&result_len),
                                to_ptr(result) as *GLchar);
-        result.truncate((result_len - 1)as uint);
+        result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
         return from_bytes(result);
     }
 }
@@ -675,7 +675,7 @@ pub fn get_shader_info_log(shader: GLuint) -> ~str {
                                1024 as GLsizei,
                                to_unsafe_ptr(&result_len),
                                to_ptr(result) as *GLchar);
-        result.truncate((result_len - 1)as uint);
+        result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
         return from_bytes(result);
     }
 }
