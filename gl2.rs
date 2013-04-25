@@ -112,9 +112,16 @@ pub static POLYGON_OFFSET_FILL:      c_uint = 0x8037 as c_uint;
 pub static SAMPLE_ALPHA_TO_COVERAGE: c_uint = 0x809E as c_uint;
 pub static SAMPLE_COVERAGE:          c_uint = 0x80A0 as c_uint;
 
-/* FrontFaceDirection */
+/* Polygons */
+pub static POINT: c_uint = 0x1B00 as c_uint;
+pub static LINE: c_uint = 0x1B01 as c_uint;
+pub static FILL: c_uint = 0x1B02 as c_uint;
 pub static CW:  c_uint = 0x0900 as c_uint;
 pub static CCW: c_uint = 0x0901 as c_uint;
+pub static POLYGON_MODE: c_uint = 0x0B40 as c_uint;
+pub static POLYGON_SMOOTH: c_uint = 0x0B41 as c_uint;
+pub static POLYGON_STIPPLE: c_uint = 0x0B42 as c_uint;
+pub static EDGE_FLAG: c_uint = 0x0B43 as c_uint;
 
 /* GetPName */
 pub static LINE_WIDTH:                    c_uint = 0x0B21 as c_uint;
@@ -764,6 +771,12 @@ pub fn pixel_store_i(pname: GLenum, param: GLint) {
     }
 }
 
+pub fn polygon_mode(face: GLenum, mode: GLenum) {
+    unsafe {
+        ll::glPolygonMode(face, mode);
+    }
+}
+
 pub fn shader_source(shader: GLuint, strings: &[~[u8]]) {
     unsafe {
         let pointers = strings.map(|string| to_ptr(*string));
@@ -1129,6 +1142,8 @@ pub fn glLinkProgram(++program: GLuint);
 pub fn glPixelStorei(++pname: GLenum, ++param: GLint);
 
 pub fn glPolygonOffset(++factor: GLfloat, ++units: GLfloat);
+
+pub fn glPolygonMode(++face: GLenum, ++mode: GLenum);
 
 pub fn glReadPixels(++x: GLint, ++y: GLint, ++width: GLsizei, ++height: GLsizei, ++format: GLenum, ++_type: GLenum, ++pixels: *GLvoid);
 
