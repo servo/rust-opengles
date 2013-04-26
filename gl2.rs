@@ -113,9 +113,16 @@ pub static POLYGON_OFFSET_FILL:      c_uint = 0x8037 as c_uint;
 pub static SAMPLE_ALPHA_TO_COVERAGE: c_uint = 0x809E as c_uint;
 pub static SAMPLE_COVERAGE:          c_uint = 0x80A0 as c_uint;
 
-/* FrontFaceDirection */
+/* Polygons */
+pub static POINT: c_uint = 0x1B00 as c_uint;
+pub static LINE: c_uint = 0x1B01 as c_uint;
+pub static FILL: c_uint = 0x1B02 as c_uint;
 pub static CW:  c_uint = 0x0900 as c_uint;
 pub static CCW: c_uint = 0x0901 as c_uint;
+pub static POLYGON_MODE: c_uint = 0x0B40 as c_uint;
+pub static POLYGON_SMOOTH: c_uint = 0x0B41 as c_uint;
+pub static POLYGON_STIPPLE: c_uint = 0x0B42 as c_uint;
+pub static EDGE_FLAG: c_uint = 0x0B43 as c_uint;
 
 /* GetPName */
 pub static LINE_WIDTH:                    c_uint = 0x0B21 as c_uint;
@@ -394,6 +401,12 @@ pub fn bind_texture(target: GLenum, texture: GLuint) {
     }
 }
 
+pub fn bind_vertex_array(array: GLuint) {
+    unsafe {
+        ll::glBindVertexArray(array);
+    }
+}
+
 pub fn blend_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
     unsafe {
         ll::glBlendColor(red, green, blue, alpha);
@@ -639,6 +652,14 @@ pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
     }
 }
 
+pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
+    unsafe {
+        let result = from_elem(n as uint, 0 as GLuint);
+        ll::glGenVertexArrays(n, to_ptr(result));
+        return result;
+    }
+}
+
 pub fn get_attrib_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
         return as_c_str(name, |name_bytes|
@@ -764,6 +785,12 @@ pub fn link_program(program: GLuint) {
 pub fn pixel_store_i(pname: GLenum, param: GLint) {
     unsafe {
         ll::glPixelStorei(pname, param);
+    }
+}
+
+pub fn polygon_mode(face: GLenum, mode: GLenum) {
+    unsafe {
+        ll::glPolygonMode(face, mode);
     }
 }
 
@@ -956,6 +983,8 @@ pub fn glBindRenderbuffer(++target: GLenum, ++renderbuffer: GLuint);
 
 pub fn glBindTexture(++target: GLenum, ++texture: GLuint);
 
+pub fn glBindVertexArray(++array: GLuint);
+
 pub fn glBlendColor(++red: GLclampf, ++green: GLclampf, ++blue: GLclampf, ++alpha: GLclampf);
 
 pub fn glBlendEquation(++mode: GLenum);
@@ -1052,6 +1081,8 @@ pub fn glGenRenderbuffers(++n: GLsizei, ++renderbuffers: *GLuint);
 
 pub fn glGenTextures(++n: GLsizei, ++textures: *GLuint);
 
+pub fn glGenVertexArrays(++n: GLsizei, arrays: *GLuint);
+
 pub fn glGetActiveAttrib(++program: GLuint, ++index: GLuint, ++bufsize: GLsizei, ++length: *GLsizei, ++size: *GLint, ++_type: *GLenum, ++name: *GLchar);
 
 pub fn glGetActiveUniform(++program: GLuint, ++index: GLuint, ++bufsize: GLsizei, ++length: *GLsizei, ++size: *GLint, ++_type: *GLenum, ++name: *GLchar);
@@ -1128,6 +1159,8 @@ pub fn glLinkProgram(++program: GLuint);
 pub fn glPixelStorei(++pname: GLenum, ++param: GLint);
 
 pub fn glPolygonOffset(++factor: GLfloat, ++units: GLfloat);
+
+pub fn glPolygonMode(++face: GLenum, ++mode: GLenum);
 
 pub fn glReadPixels(++x: GLint, ++y: GLint, ++width: GLsizei, ++height: GLsizei, ++format: GLenum, ++_type: GLenum, ++pixels: *GLvoid);
 
