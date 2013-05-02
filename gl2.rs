@@ -11,7 +11,7 @@
 
 use core::libc::*;
 use core::libc::types::common::c99::*;
-use core::cast::{reinterpret_cast, transmute};
+use core::cast::transmute;
 use core::ptr::to_unsafe_ptr;
 use core::str::{as_c_str, from_bytes};
 use core::str::raw::from_c_str;
@@ -927,7 +927,7 @@ pub fn vertex_attrib_pointer_f32(index: GLuint,
                                   FLOAT,
                                   normalized as GLboolean,
                                   stride,
-                                  reinterpret_cast(&(offset as uint)));
+                                  transmute(&(offset as uint)));
     }
 }
 
@@ -942,7 +942,7 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
                                   UNSIGNED_BYTE,
                                   normalized as GLboolean,
                                   stride,
-                                  reinterpret_cast(&(offset as uint)));
+                                  transmute(&(offset as uint)));
     }
 }
 
