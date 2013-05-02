@@ -927,7 +927,7 @@ pub fn vertex_attrib_pointer_f32(index: GLuint,
                                   FLOAT,
                                   normalized as GLboolean,
                                   stride,
-                                  transmute(&(offset as uint)));
+                                  transmute(offset as uint));
     }
 }
 
@@ -942,7 +942,7 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
                                   UNSIGNED_BYTE,
                                   normalized as GLboolean,
                                   stride,
-                                  transmute(&(offset as uint)));
+                                  transmute(offset as uint));
     }
 }
 
