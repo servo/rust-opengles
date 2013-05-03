@@ -7,6 +7,12 @@ AR ?= ar
 RUSTC ?= rustc
 RUSTFLAGS ?=
 
+ifeq ($(shell uname -s),Darwin)
+ifeq ($(shell sw_vers | grep -c 10.6),1)
+RUSTFLAGS += --cfg mac_10_6
+endif
+endif
+
 RUST_SRC=$(shell find $(VPATH)/. -type f -name '*.rs')
 
 .PHONY: all
