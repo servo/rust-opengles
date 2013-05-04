@@ -401,7 +401,7 @@ pub fn bind_texture(target: GLenum, texture: GLuint) {
     }
 }
 
-#[cfg(not(target_os="macos", mac_10_6))]
+#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
 pub fn bind_vertex_array(array: GLuint) {
     unsafe {
         ll::glBindVertexArray(array);
@@ -653,7 +653,7 @@ pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
     }
 }
 
-#[cfg(not(target_os="macos", mac_10_6))]
+#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
 pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
@@ -985,7 +985,7 @@ pub fn glBindRenderbuffer(++target: GLenum, ++renderbuffer: GLuint);
 
 pub fn glBindTexture(++target: GLenum, ++texture: GLuint);
 
-#[cfg(not(target_os="macos", mac_10_6))]
+#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
 pub fn glBindVertexArray(++array: GLuint);
 
 pub fn glBlendColor(++red: GLclampf, ++green: GLclampf, ++blue: GLclampf, ++alpha: GLclampf);
@@ -1084,7 +1084,7 @@ pub fn glGenRenderbuffers(++n: GLsizei, ++renderbuffers: *GLuint);
 
 pub fn glGenTextures(++n: GLsizei, ++textures: *GLuint);
 
-#[cfg(not(target_os="macos", mac_10_6))]
+#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
 pub fn glGenVertexArrays(++n: GLsizei, arrays: *GLuint);
 
 pub fn glGetActiveAttrib(++program: GLuint, ++index: GLuint, ++bufsize: GLsizei, ++length: *GLsizei, ++size: *GLint, ++_type: *GLenum, ++name: *GLchar);
