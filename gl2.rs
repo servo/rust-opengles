@@ -577,6 +577,28 @@ pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices
     }
 }
 
+pub fn draw_arrays_instanced(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei) {
+    unsafe {
+        ll::glDrawArraysInstanced(mode, first, count, primcount);
+    }
+}
+
+pub fn draw_elements_instanced(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>, primcount: GLsizei) {
+    unsafe {
+        ll::glDrawElementsInstanced(mode,
+                                    match indices {
+                                      Some(ref i) => cmp::min(count, i.len() as GLsizei),
+                                      None => count,
+                                    },
+                                    element_type,
+                                    match indices {
+                                      Some(ref i) => cast::transmute(&i[0]),
+                                      None => ptr::null(),
+                                    }, 
+                                    primcount);
+    }
+}
+
 pub fn enable(cap: GLenum) {
     unsafe {
         ll::glEnable(cap);
@@ -933,6 +955,21 @@ pub fn vertex_attrib_pointer_f32(index: GLuint,
     }
 }
 
+pub fn vertex_attrib_pointer_i8(index: GLuint,
+                                 size: GLint,
+                                 normalized: bool,
+                                 stride: GLsizei,
+                                 offset: GLuint) {
+    unsafe {
+        ll::glVertexAttribPointer(index,
+                                  size,
+                                  BYTE,
+                                  normalized as GLboolean,
+                                  stride,
+                                  transmute(offset as uint));
+    }
+}
+
 pub fn vertex_attrib_pointer_u8(index: GLuint,
                                  size: GLint,
                                  normalized: bool,
@@ -945,6 +982,12 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
                                   normalized as GLboolean,
                                   stride,
                                   transmute(offset as uint));
+    }
+}
+
+pub fn vertex_attrib_divisor(index: GLuint, divisor: GLuint) {
+    unsafe {
+        ll::glVertexAttribDivisor(index, divisor);
     }
 }
 
@@ -1059,6 +1102,10 @@ pub fn glDisableVertexAttribArray(++index: GLuint);
 pub fn glDrawArrays(++mode: GLenum, ++first: GLint, ++count: GLsizei);
 
 pub fn glDrawElements(++mode: GLenum, ++count: GLsizei, ++_type: GLenum, ++indices: *GLvoid);
+
+pub fn glDrawArraysInstanced(++mode: GLenum, ++first: GLint, ++count: GLsizei, ++primcount: GLsizei);
+
+pub fn glDrawElementsInstanced(++mode: GLenum, ++count: GLsizei, ++_type: GLenum, ++indices: *GLvoid, ++primcount: GLsizei);
 
 pub fn glEnable(++cap: GLenum);
 
@@ -1265,6 +1312,8 @@ pub fn glVertexAttrib4f(++indx: GLuint, ++x: GLfloat, ++y: GLfloat, ++z: GLfloat
 pub fn glVertexAttrib4fv(++indx: GLuint, ++values: *GLfloat);
 
 pub fn glVertexAttribPointer(++indx: GLuint, ++size: GLint, ++_type: GLenum, ++normalized: GLboolean, ++stride: GLsizei, ++ptr: *GLvoid);
+
+pub fn glVertexAttribDivisor(++indx: GLuint, ++divisor: GLuint);
 
 pub fn glViewport(++x: GLint, ++y: GLint, ++width: GLsizei, ++height: GLsizei);
 
