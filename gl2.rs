@@ -970,6 +970,21 @@ pub fn vertex_attrib_pointer_i8(index: GLuint,
     }
 }
 
+pub fn vertex_attrib_pointer_i32(index: GLuint,
+                                 size: GLint,
+                                 normalized: bool,
+                                 stride: GLsizei,
+                                 offset: GLuint) {
+    unsafe {
+        ll::glVertexAttribPointer(index,
+                                  size,
+                                  INT,
+                                  normalized as GLboolean,
+                                  stride,
+                                  transmute(offset as uint));
+    }
+}
+
 pub fn vertex_attrib_pointer_u8(index: GLuint,
                                  size: GLint,
                                  normalized: bool,
