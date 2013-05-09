@@ -800,6 +800,12 @@ pub fn is_texture(texture: GLuint) -> bool {
   }
 }
 
+pub fn line_width(width: GLfloat) {
+  unsafe {
+    ll::glLineWidth(width);
+  }
+}
+
 pub fn link_program(program: GLuint) {
     unsafe {
         return ll::glLinkProgram(program);
