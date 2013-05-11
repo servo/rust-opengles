@@ -30,6 +30,11 @@ extern mod linkhack { }
 #[cfg(target_os = "linux")]
 extern mod linkhack { }
 
+#[nolink]
+#[link_args="-lGLESv2"]
+#[cfg(target_os = "android")]
+extern mod linkhack { }
+
 // Constants
 
 /* BeginMode */
@@ -836,6 +841,7 @@ pub fn shader_source(shader: GLuint, strings: &[~[u8]]) {
 }
 
 // FIXME: Does not verify buffer size -- unsafe!
+#[cfg(not(target_os = "android"))]
 pub fn tex_image_2d(target: GLenum,
                     level: GLint,
                     internal_format: GLint,
@@ -849,6 +855,38 @@ pub fn tex_image_2d(target: GLenum,
         Some(data) => {
             unsafe {
                 let pdata = transmute(to_ptr(data));
+                ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
+                                 pdata);
+            }
+        }
+        None => {
+            unsafe {
+                ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
+                                 ptr::null());
+            }
+        }
+    }
+}
+
+#[cfg(target_os = "android")]
+pub fn tex_image_2d(target: GLenum,
+                    level: GLint,
+                    internal_format: GLint,
+                    width: GLsizei,
+                    height: GLsizei,
+                    border: GLint,
+                    format: GLenum,
+                    ty: GLenum,
+                    opt_data: Option<&[u8]>) {
+    match opt_data {
+        Some(data) => {
+            unsafe {
+                //opengles has only RGB colorspace, but now we are using BRG color space. GL2ext has BGR space but I guess freeglut in android doesn't support gl2 extension.
+                let mut data_ = data.to_owned();
+                for uint::range(0, data_.len()) |i| {
+                    if i % 4 == 0 { data_[i] <-> data_[i+2]; }
+                }
+                let pdata = transmute(to_ptr(data_));
                 ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
                                  pdata);
             }
