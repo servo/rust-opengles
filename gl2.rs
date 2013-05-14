@@ -21,14 +21,14 @@ use core::vec::raw::to_ptr;
 
 // Linking
 #[nolink]
-#[link_args="-framework OpenGL"]
 #[cfg(target_os = "macos")]
-extern mod linkhack { }
+#[link_args="-framework OpenGL"]
+pub extern { }
 
 #[nolink]
-#[link_args="-lGL"]
 #[cfg(target_os = "linux")]
-extern mod linkhack { }
+#[link_args="-lGL"]
+pub extern { }
 
 // Constants
 
@@ -365,83 +365,83 @@ pub fn destroy<T>(_x: T) {
 
 pub fn active_texture(texture: GLenum) {
     unsafe {
-        ll::glActiveTexture(texture);
+        glActiveTexture(texture);
     }
 }
 
 pub fn attach_shader(program: GLuint, shader: GLuint) {
     unsafe {
-        ll::glAttachShader(program, shader);
+        glAttachShader(program, shader);
     }
 }
 
 pub fn bind_attrib_location(program: GLuint, index: GLuint, name: ~str) {
     unsafe {
         do str::as_c_str(name) |cstr| {
-            ll::glBindAttribLocation(program, index, cstr);
+            glBindAttribLocation(program, index, cstr);
         }
     }
 }
 
 pub fn bind_buffer(target: GLenum, buffer: GLuint) {
     unsafe {
-        ll::glBindBuffer(target, buffer);
+        glBindBuffer(target, buffer);
     }
 }
 
 pub fn bind_framebuffer(target: GLenum, framebuffer: GLuint) {
     unsafe {
-        ll::glBindFramebuffer(target, framebuffer);
+        glBindFramebuffer(target, framebuffer);
     }
 }
 
 pub fn bind_texture(target: GLenum, texture: GLuint) {
     unsafe {
-        ll::glBindTexture(target, texture);
+        glBindTexture(target, texture);
     }
 }
 
 #[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
 pub fn bind_vertex_array(array: GLuint) {
     unsafe {
-        ll::glBindVertexArray(array);
+        glBindVertexArray(array);
     }
 }
 
 pub fn blend_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
     unsafe {
-        ll::glBlendColor(red, green, blue, alpha);
+        glBlendColor(red, green, blue, alpha);
     }
 }
 
 pub fn blend_equation(mode: GLenum) {
     unsafe {
-        ll::glBlendEquation(mode);
+        glBlendEquation(mode);
     }
 }
 
 pub fn blend_equation_separate(mode_rgb: GLenum, mode_alpha: GLenum) {
     unsafe {
-        ll::glBlendEquationSeparate(mode_rgb, mode_alpha);
+        glBlendEquationSeparate(mode_rgb, mode_alpha);
     }
 }
 
 pub fn blend_func(sfactor: GLenum, dfactor: GLenum) {
     unsafe {
-        ll::glBlendFunc(sfactor, dfactor);
+        glBlendFunc(sfactor, dfactor);
     }
 }
 
 pub fn blend_func_separate(src_rgb: GLenum, dst_rgb: GLenum, src_alpha: GLenum, dst_alpha: GLenum) {
     unsafe {
-        ll::glBlendFuncSeparate(src_rgb, dst_rgb, src_alpha, dst_alpha);
+        glBlendFuncSeparate(src_rgb, dst_rgb, src_alpha, dst_alpha);
     }
 }
 
 // FIXME: There should be some type-safe wrapper for this...
 pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) {
     unsafe {
-        ll::glBufferData(target,
+        glBufferData(target,
                          (data.len() * size_of::<T>()) as GLsizeiptr,
                          to_ptr(data) as *GLvoid,
                          usage);
@@ -453,7 +453,7 @@ pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) {
 pub fn buffer_sub_data<T>(target: GLenum, element_offset_index: uint, data: &[T]) {
     unsafe {
         let size = size_of::<T>();
-        ll::glBufferSubData(target,
+        glBufferSubData(target,
                             (element_offset_index * size) as GLintptr,
                             (data.len() * size) as GLsizeiptr,
                             to_ptr(data) as *GLvoid);
@@ -462,109 +462,109 @@ pub fn buffer_sub_data<T>(target: GLenum, element_offset_index: uint, data: &[T]
 
 pub fn check_framebuffer_status(target: GLenum) -> GLenum {
     unsafe {
-        ll::glCheckFramebufferStatus(target)
+        glCheckFramebufferStatus(target)
     }
 }
 
 pub fn clear(mask: GLbitfield) {
     unsafe {
-        ll::glClear(mask);
+        glClear(mask);
     }
 }
 
 pub fn clear_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
     unsafe {
-        ll::glClearColor(red, green, blue, alpha);
+        glClearColor(red, green, blue, alpha);
     }
 }
 
 pub fn compile_shader(shader: GLuint) {
     unsafe {
-        ll::glCompileShader(shader);
+        glCompileShader(shader);
     }
 }
 
 pub fn create_program() -> GLuint {
     unsafe {
-        return ll::glCreateProgram();
+        return glCreateProgram();
     }
 }
 
 pub fn create_shader(shader_type: GLenum) -> GLuint {
     unsafe {
-        return ll::glCreateShader(shader_type);
+        return glCreateShader(shader_type);
     }
 }
 
 pub fn cull_face(mode: GLenum) {
     unsafe {
-        ll::glCullFace(mode);
+        glCullFace(mode);
     }
 }
 
 pub fn delete_buffers(buffers: &[GLuint]) {
     unsafe {
-        ll::glDeleteBuffers(buffers.len() as GLsizei, to_ptr(buffers));
+        glDeleteBuffers(buffers.len() as GLsizei, to_ptr(buffers));
     }
 }
 
 pub fn delete_frame_buffers(frame_buffers: &[GLuint]) {
     unsafe {
-        ll::glDeleteFramebuffers(frame_buffers.len() as GLsizei, to_ptr(frame_buffers));
+        glDeleteFramebuffers(frame_buffers.len() as GLsizei, to_ptr(frame_buffers));
     }
 }
 
 pub fn delete_program(program: GLuint) {
     unsafe {
-        ll::glDeleteProgram(program);
+        glDeleteProgram(program);
     }
 }
 
 pub fn delete_render_buffers(render_buffers: &[GLuint]) {
     unsafe {
-        ll::glDeleteRenderbuffers(render_buffers.len() as GLsizei, to_ptr(render_buffers));
+        glDeleteRenderbuffers(render_buffers.len() as GLsizei, to_ptr(render_buffers));
     }
 }
 
 pub fn delete_shader(shader: GLuint) {
     unsafe {
-        ll::glDeleteShader(shader);
+        glDeleteShader(shader);
     }
 }
 
 pub fn delete_textures(textures: &[GLuint]) {
     unsafe {
-        return ll::glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
+        return glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
     }
 }
 
 pub fn depth_func(func: GLenum) {
     unsafe {
-        ll::glDepthFunc(func);
+        glDepthFunc(func);
     }
 }
 
 pub fn depth_mask(flag: bool) {
     unsafe {
-        ll::glDepthMask(flag as GLboolean);
+        glDepthMask(flag as GLboolean);
     }
 }
 
 pub fn detach_shader(program: GLuint, shader: GLuint) {
     unsafe {
-        ll::glDetachShader(program, shader);
+        glDetachShader(program, shader);
     }
 }
 
 pub fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
     unsafe {
-        return ll::glDrawArrays(mode, first, count);
+        return glDrawArrays(mode, first, count);
     }
 }
 
 pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>) {
     unsafe {
-        return ll::glDrawElements(mode,
+        return glDrawElements(mode,
                                   match indices {
                                     Some(ref i) => cmp::min(count, i.len() as GLsizei),
                                     None => count,
@@ -579,13 +579,13 @@ pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices
 
 pub fn draw_arrays_instanced(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei) {
     unsafe {
-        ll::glDrawArraysInstanced(mode, first, count, primcount);
+        glDrawArraysInstanced(mode, first, count, primcount);
     }
 }
 
 pub fn draw_elements_instanced(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>, primcount: GLsizei) {
     unsafe {
-        ll::glDrawElementsInstanced(mode,
+        glDrawElementsInstanced(mode,
                                     match indices {
                                       Some(ref i) => cmp::min(count, i.len() as GLsizei),
                                       None => count,
@@ -601,37 +601,37 @@ pub fn draw_elements_instanced(mode: GLenum, count: GLsizei, element_type: GLenu
 
 pub fn enable(cap: GLenum) {
     unsafe {
-        ll::glEnable(cap);
+        glEnable(cap);
     }
 }
 
 pub fn disable(cap: GLenum) {
     unsafe {
-        ll::glDisable(cap);
+        glDisable(cap);
     }
 }
 
 pub fn enable_vertex_attrib_array(index: GLuint) {
     unsafe {
-        ll::glEnableVertexAttribArray(index);
+        glEnableVertexAttribArray(index);
     }
 }
 
 pub fn disable_vertex_attrib_array(index: GLuint) {
     unsafe {
-        ll::glDisableVertexAttribArray(index);
+        glDisableVertexAttribArray(index);
     }
 }
 
 pub fn finish() {
     unsafe {
-        return ll::glFinish();
+        return glFinish();
     }
 }
 
 pub fn flush() {
     unsafe {
-        return ll::glFlush();
+        return glFlush();
     }
 }
 
@@ -641,20 +641,20 @@ pub fn framebuffer_texture_2d(target: GLenum,
                               texture: GLuint,
                               level: GLint) {
     unsafe {
-        ll::glFramebufferTexture2D(target, attachment, textarget, texture, level);
+        glFramebufferTexture2D(target, attachment, textarget, texture, level);
     }
 }
 
 pub fn front_face(mode: GLenum) {
     unsafe {
-        ll::glFrontFace(mode);
+        glFrontFace(mode);
     }
 }
 
 pub fn gen_buffers(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
-        ll::glGenBuffers(n, to_ptr(result));
+        glGenBuffers(n, to_ptr(result));
         return result;
     }
 }
@@ -662,7 +662,7 @@ pub fn gen_buffers(n: GLsizei) -> ~[GLuint] {
 pub fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0);
-        ll::glGenFramebuffers(n, to_ptr(result));
+        glGenFramebuffers(n, to_ptr(result));
         return result;
     }
 }
@@ -670,7 +670,7 @@ pub fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
 pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
-        ll::glGenTextures(n, to_ptr(result));
+        glGenTextures(n, to_ptr(result));
         return result;
     }
 }
@@ -679,7 +679,7 @@ pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
 pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
-        ll::glGenVertexArrays(n, to_ptr(result));
+        glGenVertexArrays(n, to_ptr(result));
         return result;
     }
 }
@@ -687,13 +687,13 @@ pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
 pub fn get_attrib_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
         return as_c_str(name, |name_bytes|
-            ll::glGetAttribLocation(program, name_bytes as *GLchar));
+            glGetAttribLocation(program, name_bytes as *GLchar));
     }
 }
 
 pub fn get_error() -> GLenum {
     unsafe {
-        return ll::glGetError();
+        return glGetError();
     }
 }
 
@@ -701,7 +701,7 @@ pub fn get_program_info_log(program: GLuint) -> ~str {
     unsafe {
         let mut result = from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
-        ll::glGetProgramInfoLog(program,
+        glGetProgramInfoLog(program,
                                1024 as GLsizei,
                                to_unsafe_ptr(&result_len),
                                to_ptr(result) as *GLchar);
@@ -713,7 +713,7 @@ pub fn get_program_info_log(program: GLuint) -> ~str {
 pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
     unsafe {
         let result: GLint = 0 as GLint;
-        ll::glGetProgramiv(program, pname, to_unsafe_ptr(&result));
+        glGetProgramiv(program, pname, to_unsafe_ptr(&result));
         return result;
     }
 }
@@ -722,7 +722,7 @@ pub fn get_shader_info_log(shader: GLuint) -> ~str {
     unsafe {
         let mut result = from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
-        ll::glGetShaderInfoLog(shader,
+        glGetShaderInfoLog(shader,
                                1024 as GLsizei,
                                to_unsafe_ptr(&result_len),
                                to_ptr(result) as *GLchar);
@@ -733,7 +733,7 @@ pub fn get_shader_info_log(shader: GLuint) -> ~str {
 
 pub fn get_string(which: GLenum) -> ~str {
     unsafe {
-        let llstr = ll::glGetString(which);
+        let llstr = glGetString(which);
         if !ptr::is_null(llstr) {
             return from_c_str(llstr as *c_char);
         } else {
@@ -745,7 +745,7 @@ pub fn get_string(which: GLenum) -> ~str {
 pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
     unsafe {
         let result: GLint = 0 as GLint;
-        ll::glGetShaderiv(shader, pname, to_unsafe_ptr(&result));
+        glGetShaderiv(shader, pname, to_unsafe_ptr(&result));
         return result;
     }
 }
@@ -753,74 +753,74 @@ pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
 pub fn get_uniform_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
         do as_c_str(name) |name_bytes| {
-            ll::glGetUniformLocation(program, name_bytes as *GLchar)
+            glGetUniformLocation(program, name_bytes as *GLchar)
         }
     }
 }
 
 pub fn is_buffer(buffer: GLuint) -> bool {
   unsafe {
-    ll::glIsBuffer(buffer) > 0
+    glIsBuffer(buffer) > 0
   }
 }
 
 pub fn is_enabled(cap: GLenum) -> bool {
   unsafe {
-    ll::glIsEnabled(cap) > 0
+    glIsEnabled(cap) > 0
   }
 }
 
 pub fn is_framebuffer(framebuffer: GLuint) -> bool {
   unsafe {
-    ll::glIsFramebuffer(framebuffer) > 0
+    glIsFramebuffer(framebuffer) > 0
   }
 }
 
 pub fn is_program(program: GLuint) -> bool {
   unsafe {
-    ll::glIsProgram(program) > 0
+    glIsProgram(program) > 0
   }
 }
 
 pub fn is_renderbuffer(renderbuffer: GLuint) -> bool {
   unsafe {
-    ll::glIsRenderbuffer(renderbuffer) > 0
+    glIsRenderbuffer(renderbuffer) > 0
   }
 }
 
 pub fn is_shader(shader: GLuint) -> bool {
   unsafe {
-    ll::glIsShader(shader) > 0
+    glIsShader(shader) > 0
   }
 }
 
 pub fn is_texture(texture: GLuint) -> bool {
   unsafe {
-    ll::glIsTexture(texture) > 0
+    glIsTexture(texture) > 0
   }
 }
 
 pub fn line_width(width: GLfloat) {
   unsafe {
-    ll::glLineWidth(width);
+    glLineWidth(width);
   }
 }
 
 pub fn link_program(program: GLuint) {
     unsafe {
-        return ll::glLinkProgram(program);
+        return glLinkProgram(program);
     }
 }
 
 pub fn pixel_store_i(pname: GLenum, param: GLint) {
     unsafe {
-        ll::glPixelStorei(pname, param);
+        glPixelStorei(pname, param);
     }
 }
 
 pub fn polygon_mode(face: GLenum, mode: GLenum) {
     unsafe {
-        ll::glPolygonMode(face, mode);
+        glPolygonMode(face, mode);
     }
 }
 
@@ -828,7 +828,7 @@ pub fn shader_source(shader: GLuint, strings: &[~[u8]]) {
     unsafe {
         let pointers = strings.map(|string| to_ptr(*string));
         let lengths = strings.map(|string| string.len() as GLint);
-        ll::glShaderSource(shader, pointers.len() as GLsizei,
+        glShaderSource(shader, pointers.len() as GLsizei,
                            to_ptr(pointers) as **GLchar, to_ptr(lengths));
         destroy(lengths);
         destroy(pointers);
@@ -849,13 +849,13 @@ pub fn tex_image_2d(target: GLenum,
         Some(data) => {
             unsafe {
                 let pdata = transmute(to_ptr(data));
-                ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
+                glTexImage2D(target, level, internal_format, width, height, border, format, ty,
                                  pdata);
             }
         }
         None => {
             unsafe {
-                ll::glTexImage2D(target, level, internal_format, width, height, border, format, ty,
+                glTexImage2D(target, level, internal_format, width, height, border, format, ty,
                                  ptr::null());
             }
         }
@@ -876,13 +876,13 @@ pub fn tex_sub_image_2d(target: GLenum,
         Some(data) => {
             unsafe {
                 let pdata = transmute(to_ptr(data));
-                ll::glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
+                glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
                                    pdata);
             }
         }
         None => {
             unsafe {
-                ll::glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
+                glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
                                    ptr::null());
             }
         }
@@ -891,43 +891,43 @@ pub fn tex_sub_image_2d(target: GLenum,
 
 pub fn tex_parameter_i(target: GLenum, pname: GLenum, param: GLint) {
     unsafe {
-        ll::glTexParameteri(target, pname, param);
+        glTexParameteri(target, pname, param);
     }
 }
 
 pub fn uniform_1f(location: GLint, x: GLfloat) {
     unsafe {
-        ll::glUniform1f(location, x);
+        glUniform1f(location, x);
     }
 }
 
 pub fn uniform_1i(location: GLint, x: GLint) {
     unsafe {
-        ll::glUniform1i(location, x);
+        glUniform1i(location, x);
     }
 }
 
 pub fn uniform_2f(location: GLint, x: GLfloat, y: GLfloat) {
     unsafe {
-        ll::glUniform2f(location, x, y);
+        glUniform2f(location, x, y);
     }
 }
 
 pub fn uniform_3f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat) {
     unsafe {
-        ll::glUniform3f(location, x, y, z);
+        glUniform3f(location, x, y, z);
     }
 }
 
 pub fn uniform_4f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat, w: GLfloat) {
     unsafe {
-        ll::glUniform4f(location, x, y, z, w);
+        glUniform4f(location, x, y, z, w);
     }
 }
 
 pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: &[f32]) {
     unsafe {
-        ll::glUniformMatrix4fv(location,
+        glUniformMatrix4fv(location,
                                1 as GLsizei,
                                transpose as GLboolean,
                                cast::transmute(&value[0]));
@@ -936,13 +936,13 @@ pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: &[f32]) {
 
 pub fn use_program(program: GLuint) {
     unsafe {
-        ll::glUseProgram(program);
+        glUseProgram(program);
     }
 }
 
 pub fn validate_program(program: GLuint) {
     unsafe {
-        ll::glValidateProgram(program);
+        glValidateProgram(program);
     }
 }
 
@@ -952,7 +952,7 @@ pub fn vertex_attrib_pointer_f32(index: GLuint,
                                  stride: GLsizei,
                                  offset: GLuint) {
     unsafe {
-        ll::glVertexAttribPointer(index,
+        glVertexAttribPointer(index,
                                   size,
                                   FLOAT,
                                   normalized as GLboolean,
@@ -967,7 +967,7 @@ pub fn vertex_attrib_pointer_i8(index: GLuint,
                                  stride: GLsizei,
                                  offset: GLuint) {
     unsafe {
-        ll::glVertexAttribPointer(index,
+        glVertexAttribPointer(index,
                                   size,
                                   BYTE,
                                   normalized as GLboolean,
@@ -982,7 +982,7 @@ pub fn vertex_attrib_pointer_i32(index: GLuint,
                                  stride: GLsizei,
                                  offset: GLuint) {
     unsafe {
-        ll::glVertexAttribPointer(index,
+        glVertexAttribPointer(index,
                                   size,
                                   INT,
                                   normalized as GLboolean,
@@ -997,7 +997,7 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
                                  stride: GLsizei,
                                  offset: GLuint) {
     unsafe {
-        ll::glVertexAttribPointer(index,
+        glVertexAttribPointer(index,
                                   size,
                                   UNSIGNED_BYTE,
                                   normalized as GLboolean,
@@ -1008,13 +1008,13 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
 
 pub fn vertex_attrib_divisor(index: GLuint, divisor: GLuint) {
     unsafe {
-        ll::glVertexAttribDivisor(index, divisor);
+        glVertexAttribDivisor(index, divisor);
     }
 }
 
 pub fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
     unsafe {
-        ll::glViewport(x, y, width, height);
+        glViewport(x, y, width, height);
     }
 }
 
@@ -1031,7 +1031,7 @@ pub mod apple {
 }
 
 #[nolink]
-extern mod ll {
+extern {
 
 // Lower-level API
 
