@@ -51,16 +51,3 @@ extern {
                                   width: GLsizei, height: GLsizei, format: GLenum, ty: GLenum,
                                   ioSurface: IOSurfaceRef, plane: GLuint) -> CGLError;
 }
-
-#[nolink]
-extern mod ll {
-    // CGLContext.h
-    fn CGLGetCurrentContext() -> CGLContextObj;
-
-    // CGLIOSurface.h
-    fn CGLTexImageIOSurface2D(ctx: CGLContextObj, target: GLenum, internal_format: GLenum,
-                              width: GLsizei, height: GLsizei, format: GLenum, pixel_type: GLenum,
-                              ioSurface: IOSurfaceRef, plane: GLuint)
-                           -> CGLError;
-}
-
