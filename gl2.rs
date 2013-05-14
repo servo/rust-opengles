@@ -401,7 +401,8 @@ pub fn bind_texture(target: GLenum, texture: GLuint) {
     }
 }
 
-#[cfg(not(target_os="macos"))] #[cfg(not( mac_10_6))]
+#[cfg(not(target_os="macos"))]
+#[cfg(not(mac_10_6))]
 pub fn bind_vertex_array(array: GLuint) {
     unsafe {
         ll::glBindVertexArray(array);
@@ -577,12 +578,16 @@ pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices
     }
 }
 
+#[cfg(not(target_os="macos"))]
+#[cfg(not(mac_10_6))]
 pub fn draw_arrays_instanced(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei) {
     unsafe {
         ll::glDrawArraysInstanced(mode, first, count, primcount);
     }
 }
 
+#[cfg(not(target_os="macos"))]
+#[cfg(not(mac_10_6))]
 pub fn draw_elements_instanced(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>, primcount: GLsizei) {
     unsafe {
         ll::glDrawElementsInstanced(mode,
@@ -1006,6 +1011,8 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
     }
 }
 
+#[cfg(not(target_os="macos"))]
+#[cfg(not(mac_10_6))]
 pub fn vertex_attrib_divisor(index: GLuint, divisor: GLuint) {
     unsafe {
         ll::glVertexAttribDivisor(index, divisor);
@@ -1124,8 +1131,12 @@ pub fn glDrawArrays(mode: GLenum, first: GLint, count: GLsizei);
 
 pub fn glDrawElements(mode: GLenum, count: GLsizei, _type: GLenum, indices: *GLvoid);
 
+#[cfg(not(target_os="macos"))]
+#[cfg(not(mac_10_6))]
 pub fn glDrawArraysInstanced(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei);
 
+#[cfg(not(target_os="macos"))]
+#[cfg(not(mac_10_6))]
 pub fn glDrawElementsInstanced(mode: GLenum, count: GLsizei, _type: GLenum, indices: *GLvoid, primcount: GLsizei);
 
 pub fn glEnable(cap: GLenum);
@@ -1334,6 +1345,8 @@ pub fn glVertexAttrib4fv(indx: GLuint, values: *GLfloat);
 
 pub fn glVertexAttribPointer(indx: GLuint, size: GLint, _type: GLenum, normalized: GLboolean, stride: GLsizei, ptr: *GLvoid);
 
+#[cfg(not(target_os="macos"))]
+#[cfg(not(mac_10_6))]
 pub fn glVertexAttribDivisor(indx: GLuint, divisor: GLuint);
 
 pub fn glViewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei);
