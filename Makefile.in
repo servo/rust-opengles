@@ -11,6 +11,9 @@ ifeq ($(shell uname -s),Darwin)
 ifeq ($(shell sw_vers | grep -c 10.6),1)
 RUSTFLAGS += --cfg mac_10_6
 endif
+ifeq ($(shell sw_vers | grep -c 10.7),1)
+RUSTFLAGS += --cfg mac_10_7
+endif
 endif
 
 RUST_SRC=$(shell find $(VPATH)/. -type f -name '*.rs')
