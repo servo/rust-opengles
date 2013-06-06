@@ -18,6 +18,10 @@ use std::str::raw::from_c_str;
 use std::sys::size_of;
 use std::vec::from_elem;
 use std::vec::raw::to_ptr;
+use std::str;
+use std::cmp;
+use std::cast;
+use std::ptr;
 
 // Linking
 #[nolink]
