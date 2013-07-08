@@ -63,6 +63,10 @@ pub static DST_COLOR:                c_uint = 0x0306 as c_uint;
 pub static ONE_MINUS_DST_COLOR:      c_uint = 0x0307 as c_uint;
 pub static SRC_ALPHA_SATURATE:       c_uint = 0x0308 as c_uint;
 
+/* Boolean */
+pub static TRUE:                     c_uchar = 1 as c_uchar;
+pub static FALSE:                    c_uchar = 0 as c_uchar;
+
 /* BlendEquationSeparate */
 pub static FUNC_ADD:                 c_uint = 0x8006 as c_uint;
 pub static BLEND_EQUATION:           c_uint = 0x8009 as c_uint;
