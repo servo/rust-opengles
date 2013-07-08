@@ -9,6 +9,8 @@
 
 // Mac-specific OpenGL bindings.
 
+#[allow(non_uppercase_statics)];
+
 use gl2::{GLenum, GLint, GLsizei, GLuint};
 use std::libc::*;
 
