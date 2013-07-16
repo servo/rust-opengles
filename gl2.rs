@@ -20,7 +20,7 @@ use std::str::{as_c_str, from_bytes};
 use std::str::raw::from_c_str;
 use std::sys::size_of;
 use std::vec::from_elem;
-use std::vec::raw::to_ptr;
+use std::vec::raw::{set_len, to_ptr};
 
 // Linking
 #[nolink]
@@ -836,6 +836,31 @@ pub fn polygon_mode(face: GLenum, mode: GLenum) {
     }
 }
 
+pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, pixel_type: GLenum) -> ~[u8] {
+    let colors = match format {
+        RGB => 3,
+        RGBA => 3,
+        _ => fail!(~"unsupported format for read_pixels"),
+    };
+    let depth = match pixel_type {
+        UNSIGNED_BYTE => 1,
+        _ => fail!(~"unsupported pixel_type for read_pixels"),
+    };
+
+    let mut pixels: ~[u8] = ~[];
+    pixels.reserve(width * height * colors * depth as uint);
+
+    do pixels.as_mut_buf |buf, _| {
+        unsafe {
+            glReadPixels(x, y, width, height, format, pixel_type, cast::transmute(buf));
+        }
+    }
+
+    unsafe { set_len(&mut pixels, width * height * colors * depth as uint); }
+
+    pixels
+}
+
 pub fn shader_source(shader: GLuint, strings: &[~[u8]]) {
     unsafe {
         let pointers = strings.map(|string| to_ptr(*string));
@@ -1252,7 +1277,7 @@ pub fn glPolygonOffset(factor: GLfloat, units: GLfloat);
 
 pub fn glPolygonMode(face: GLenum, mode: GLenum);
 
-pub fn glReadPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, _type: GLenum, pixels: *GLvoid);
+pub fn glReadPixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, _type: GLenum, pixels: *mut GLvoid);
 
 // Unsupported on Mac:
 // fn glReleaseShaderCompiler();
