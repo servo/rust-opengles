@@ -709,6 +709,12 @@ pub fn get_error() -> GLenum {
     }
 }
 
+pub fn get_integer_v(pname: GLenum, result: &mut [GLint]) {
+    unsafe {
+        glGetIntegerv(pname, to_unsafe_ptr(&result[0]));
+    }
+}
+
 pub fn get_program_info_log(program: GLuint) -> ~str {
     unsafe {
         let mut result = from_elem(1024u, 0u8);
@@ -859,6 +865,12 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
     unsafe { set_len(&mut pixels, width * height * colors * depth as uint); }
 
     pixels
+}
+
+pub fn scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
+    unsafe {
+        glScissor(x, y, width, height);
+    }
 }
 
 pub fn shader_source(shader: GLuint, strings: &[~[u8]]) {
