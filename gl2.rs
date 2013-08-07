@@ -26,12 +26,12 @@ use std::vec::raw::{set_len, to_ptr};
 #[nolink]
 #[cfg(target_os = "macos")]
 #[link_args="-framework OpenGL"]
-pub extern { }
+extern { }
 
 #[nolink]
 #[cfg(target_os = "linux")]
 #[link_args="-lGL"]
-pub extern { }
+extern { }
 
 #[nolink]
 #[cfg(target_os = "android")]
@@ -678,7 +678,7 @@ pub fn gen_buffers(n: GLsizei) -> ~[GLuint] {
 
 pub fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
     unsafe {
-        let result = from_elem(n as uint, 0);
+        let result = from_elem(n as uint, 0 as GLuint);
         glGenFramebuffers(n, to_ptr(result));
         return result;
     }
