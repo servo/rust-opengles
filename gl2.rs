@@ -15,8 +15,7 @@ use std::cast::transmute;
 use std::cmp;
 use std::ptr;
 use std::ptr::to_unsafe_ptr;
-use std::str;
-use std::str::{as_c_str, from_bytes};
+use std::str::from_bytes;
 use std::str::raw::from_c_str;
 use std::sys::size_of;
 use std::vec::from_elem;
@@ -36,7 +35,7 @@ extern { }
 #[nolink]
 #[cfg(target_os = "android")]
 #[link_args="-lGLESv2"]
-pub extern { }
+extern { }
 
 // Constants
 
@@ -389,7 +388,7 @@ pub fn attach_shader(program: GLuint, shader: GLuint) {
 
 pub fn bind_attrib_location(program: GLuint, index: GLuint, name: ~str) {
     unsafe {
-        do str::as_c_str(name) |cstr| {
+        do name.as_c_str |cstr| {
             glBindAttribLocation(program, index, cstr);
         }
     }
@@ -704,8 +703,9 @@ pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
 
 pub fn get_attrib_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
-        return as_c_str(name, |name_bytes|
-            glGetAttribLocation(program, name_bytes as *GLchar));
+        do name.as_c_str |name_bytes| {
+            glGetAttribLocation(program, name_bytes as *GLchar)
+        }
     }
 }
 
@@ -776,7 +776,7 @@ pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
 
 pub fn get_uniform_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
-        do as_c_str(name) |name_bytes| {
+        do name.as_c_str |name_bytes| {
             glGetUniformLocation(program, name_bytes as *GLchar)
         }
     }
@@ -861,7 +861,7 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
     };
 
     let mut pixels: ~[u8] = ~[];
-    pixels.reserve(width * height * colors * depth as uint);
+    pixels.reserve((width * height * colors * depth) as uint);
 
     do pixels.as_mut_buf |buf, _| {
         unsafe {
@@ -869,7 +869,7 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
         }
     }
 
-    unsafe { set_len(&mut pixels, width * height * colors * depth as uint); }
+    unsafe { set_len(&mut pixels, (width * height * colors * depth) as uint); }
 
     pixels
 }
