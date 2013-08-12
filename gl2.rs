@@ -388,7 +388,7 @@ pub fn attach_shader(program: GLuint, shader: GLuint) {
 
 pub fn bind_attrib_location(program: GLuint, index: GLuint, name: ~str) {
     unsafe {
-        do name.as_c_str |cstr| {
+        do name.to_c_str().with_ref |cstr| {
             glBindAttribLocation(program, index, cstr);
         }
     }
@@ -703,7 +703,7 @@ pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
 
 pub fn get_attrib_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
-        do name.as_c_str |name_bytes| {
+        do name.to_c_str().with_ref |name_bytes| {
             glGetAttribLocation(program, name_bytes as *GLchar)
         }
     }
@@ -776,7 +776,7 @@ pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
 
 pub fn get_uniform_location(program: GLuint, name: ~str) -> c_int {
     unsafe {
-        do name.as_c_str |name_bytes| {
+        do name.to_c_str().with_ref |name_bytes| {
             glGetUniformLocation(program, name_bytes as *GLchar)
         }
     }
