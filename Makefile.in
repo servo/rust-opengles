@@ -25,11 +25,11 @@ all:	librustopengles.dummy
 	$(CC) $< -o $@ -c $(CFLAGS)
 
 librustopengles.dummy: lib.rs $(RUST_SRC)
-	$(RUSTC) $(RUSTFLAGS) $< -o $@
+	$(RUSTC) $(RUSTFLAGS) $< --out-dir .
 	touch $@
 
 rustopengles-test: lib.rs $(RUST_SRC)
-	$(RUSTC) $(RUSTFLAGS) $< -o $@ --test
+	$(RUSTC) $(RUSTFLAGS) $< --out-dir . --test
 
 check: rustopengles-test
 	./rustopengles-test
