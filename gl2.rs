@@ -15,7 +15,7 @@ use std::cast::transmute;
 use std::cmp;
 use std::ptr;
 use std::ptr::to_unsafe_ptr;
-use std::str::from_bytes;
+use std::str::from_utf8;
 use std::str::raw::from_c_str;
 use std::sys::size_of;
 use std::vec::from_elem;
@@ -780,7 +780,7 @@ pub fn get_program_info_log(program: GLuint) -> ~str {
                                to_unsafe_ptr(&result_len),
                                to_ptr(result) as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        return from_bytes(result);
+        return from_utf8(result);
     }
 }
 
@@ -803,7 +803,7 @@ pub fn get_shader_info_log(shader: GLuint) -> ~str {
                                to_unsafe_ptr(&result_len),
                                to_ptr(result) as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        return from_bytes(result);
+        return from_utf8(result);
     }
 }
 
