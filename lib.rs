@@ -15,6 +15,9 @@ extern mod std;
 
 pub mod gl2;
 
+#[cfg(target_os="linux")]
+pub mod glx;
+
 #[cfg(target_os="macos")]
 pub mod cgl;
 
