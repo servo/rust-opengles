@@ -42,6 +42,7 @@ extern {
     // Context functions
     pub fn CGLCreateContext(pix: CGLPixelFormatObj, share: CGLContextObj, ctx: *CGLContextObj) ->
                             CGLError;
+    pub fn CGLGetPixelFormat(ctx: CGLContextObj) -> CGLPixelFormatObj;
 
     // Locking functions
     pub fn CGLLockContext(ctx: CGLContextObj) -> CGLError;
