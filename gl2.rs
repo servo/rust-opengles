@@ -928,16 +928,17 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
         _ => fail!(~"unsupported pixel_type for read_pixels"),
     };
 
+    let len = (width * height * colors * depth) as uint;
     let mut pixels: ~[u8] = ~[];
-    pixels.reserve((width * height * colors * depth) as uint);
+    pixels.reserve(len);
 
     do pixels.as_mut_buf |buf, _| {
         unsafe {
-            glReadPixels(x, y, width, height, format, pixel_type, cast::transmute(buf));
+            glReadPixels(x, y, width, height, format, pixel_type, buf as *mut c_void);
         }
     }
 
-    unsafe { set_len(&mut pixels, (width * height * colors * depth) as uint); }
+    unsafe { set_len(&mut pixels, len); }
 
     pixels
 }
