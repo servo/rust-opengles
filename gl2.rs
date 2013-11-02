@@ -934,6 +934,8 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
 
     do pixels.as_mut_buf |buf, _| {
         unsafe {
+            // We don't want any alignment padding on pixel rows.
+            glPixelStorei(PACK_ALIGNMENT, 1);
             glReadPixels(x, y, width, height, format, pixel_type, buf as *mut c_void);
         }
     }
