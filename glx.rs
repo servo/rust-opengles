@@ -77,18 +77,24 @@ pub static GLX_AUX8_EXT: c_int        = 0x20ea;
 pub static GLX_AUX9_EXT: c_int        = 0x20eb;
 
 pub static GLX_DRAWABLE_TYPE: c_int   = 0x8010;
+pub static GLX_RENDER_TYPE: c_int     = 0x8011;
 
-pub static GLX_RGBA: c_int       = 4;
-pub static GLX_DEPTH_SIZE: c_int = 12;
+pub static GLX_RGBA: c_int            = 4;
+pub static GLX_DOUBLEBUFFER: c_int    = 5;
+pub static GLX_ALPHA_SIZE: c_int      = 11;
+pub static GLX_DEPTH_SIZE: c_int      = 12;
 
 pub static GLX_WINDOW_BIT: c_int      = 0x01;
 pub static GLX_PIXMAP_BIT: c_int      = 0x02;
 pub static GLX_PBUFFER_BIT: c_int     = 0x04;
 pub static GLX_AUX_BUFFERS_BIT: c_int = 0x10;
 
+pub static GLX_RGBA_BIT: c_int        = 0x00000001;
 // Functions
 
 extern {
+    pub fn glXQueryVersion(dpy: *Display, major: *mut c_int, minor: *mut c_int) -> bool;
+
     pub fn glXGetProcAddress(procName: *c_char) -> extern "C" fn();
 
     pub fn glXReleaseTexImageEXT(dpy: *Display, drawable: GLXDrawable, buffer: c_int);
@@ -101,11 +107,14 @@ extern {
 
     pub fn glXChooseVisual(dpy: *Display, screen: c_int, attribList: *c_int) -> *XVisualInfo;
 
+    // For GLX 1.3+
     pub fn glXCreatePixmap(dpy: *Display, config: GLXFBConfig, pixmap: Pixmap, attribList: *c_int)
                            -> GLXPixmap;
 
     pub fn glXDestroyPixmap(dpy: *Display, pixmap: GLXPixmap);
 
+    // For GLX < 1.3. Use only to match behavior with other libraries (i.e. Skia) that
+    // access GLX pixmaps using the visual instead of fbconfig.
     pub fn glXCreateGLXPixmap(dpy: *Display, visual: *XVisualInfo, pixmap: Pixmap) -> GLXPixmap;
 
     pub fn glXDestroyGLXPixmap(dpy: *Display, pix: GLXPixmap);
@@ -121,3 +130,11 @@ extern {
     pub fn glXGetVisualFromFBConfig(dpy: *Display, config: GLXFBConfig) -> *XVisualInfo;
 }
 
+pub fn get_version(display: *Display) -> (int, int) {
+    unsafe {
+        let mut major = 0;
+        let mut minor = 0;
+        glXQueryVersion(display, &mut major, &mut minor);
+        (major as int, minor as int)
+    }
+}
