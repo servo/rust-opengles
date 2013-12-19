@@ -7,6 +7,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#[feature(link_args)];
+
 extern mod std;
 
 pub mod gl2;
