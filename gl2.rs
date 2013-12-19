@@ -367,13 +367,6 @@ pub type GLsizeiptr = ssize_t;
 // gl2ext
 pub type GLeglImageOES = *c_void;
 
-// Helper functions
-
-pub fn destroy<T>(_x: T) {
-    // Just let the object drop.
-}
-
-
 // Exposed Rust API using Rust naming conventions
 
 pub fn active_texture(texture: GLenum) {
@@ -902,8 +895,8 @@ pub fn shader_source(shader: GLuint, strings: &[&[u8]]) {
         glShaderSource(shader, pointers.len() as GLsizei,
                        pointers.as_ptr() as **GLchar, lengths.as_ptr());
     }
-    destroy(lengths);
-    destroy(pointers);
+    drop(lengths);
+    drop(pointers);
 }
 
 // FIXME: Does not verify buffer size -- unsafe!
