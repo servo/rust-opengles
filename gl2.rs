@@ -896,14 +896,14 @@ pub fn scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
 }
 
 pub fn shader_source(shader: GLuint, strings: &[&[u8]]) {
+    let pointers = strings.map(|string| (*string).as_ptr());
+    let lengths = strings.map(|string| string.len() as GLint);
     unsafe {
-        let pointers = strings.map(|string| (*string).as_ptr());
-        let lengths = strings.map(|string| string.len() as GLint);
         glShaderSource(shader, pointers.len() as GLsizei,
                        pointers.as_ptr() as **GLchar, lengths.as_ptr());
-        destroy(lengths);
-        destroy(pointers);
     }
+    destroy(lengths);
+    destroy(pointers);
 }
 
 // FIXME: Does not verify buffer size -- unsafe!
