@@ -365,6 +365,16 @@ pub type GLintptr = intptr_t;
 
 pub type GLsizeiptr = ssize_t;
 
+// GL info
+pub static GL_VENDOR: c_uint = 0x1F00;
+pub static GL_RENDERER: c_uint = 0x1F01;
+pub static GL_VERSION: c_uint = 0x1F02;
+pub static GL_EXTENSIONS: c_uint = 0x1F03;
+
+pub static GL_COLOR_BUFFER_BIT: c_uint = 0x00004000;
+
+// gl2ext
+pub type GLeglImageOES = *c_void;
 
 // Helper functions
 
@@ -450,14 +460,27 @@ pub fn blend_func_separate(src_rgb: GLenum, dst_rgb: GLenum, src_alpha: GLenum, 
         glBlendFuncSeparate(src_rgb, dst_rgb, src_alpha, dst_alpha);
     }
 }
-
 // FIXME: There should be some type-safe wrapper for this...
+#[cfg(not(target_os="android"), not(target_os="macos"))]
+#[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) {
     unsafe {
         glBufferData(target,
                      (data.len() * size_of::<T>()) as GLsizeiptr,
                      to_ptr(data) as *GLvoid,
                      usage);
+    }
+}
+
+// FIXME: There should be some type-safe wrapper for this...
+// FIXME: T is not working
+#[cfg(target_os="android")]
+pub fn buffer_data(target: GLenum, data: &[f32], usage: GLenum) {
+    unsafe {
+        glBufferData(target,
+                         (data.len() * size_of::<f32>()) as GLsizeiptr,
+                         to_ptr(data) as *GLvoid,
+                         usage);
     }
 }
 
@@ -1080,6 +1103,22 @@ pub fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
     }
 }
 
+
+#[cfg(target_os="android")]
+pub fn egl_image_target_texture2d_oes(target: GLenum, image: GLeglImageOES) {
+    unsafe {
+        return glEGLImageTargetTexture2DOES(target, image);
+    }
+
+}
+
+#[cfg(target_os="android")]
+pub fn egl_image_target_renderbuffer_storage_oes(target: GLenum, image: GLeglImageOES) {
+    unsafe {
+        return glEGLImageTargetRenderbufferStorageOES(target, image);
+    }
+}
+
 // Apple extensions
 #[cfg(target_os="macos")]
 pub mod apple {
@@ -1409,6 +1448,9 @@ pub fn glVertexAttribDivisor(indx: GLuint, divisor: GLuint);
 
 pub fn glViewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei);
 
+#[cfg(target_os="android")]
+pub fn glEGLImageTargetTexture2DOES(target: GLenum, image: GLeglImageOES);
+pub fn glEGLImageTargetRenderbufferStorageOES(target: GLenum, image: GLeglImageOES);
 
 }
 
