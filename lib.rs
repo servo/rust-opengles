@@ -7,9 +7,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#[link(name = "opengles",
-        vers = "0.1")];
-#[crate_type = "lib"];
+#[crate_id = "github.com/mozilla-servo/rust-opengles#opengles:0.1"];
 
 extern mod std;
 
