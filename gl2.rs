@@ -1246,6 +1246,7 @@ pub fn glBlendFunc(sfactor: GLenum, dfactor: GLenum);
 
 pub fn glBlendFuncSeparate(srcRGB: GLenum, dstRGB: GLenum, srcAlpha: GLenum, dstAlpha: GLenum);
 
+#[cfg(not(mac_10_6))]
 pub fn glBufferData(target: GLenum, size: GLsizeiptr, data: *GLvoid, usage: GLenum);
 
 pub fn glBufferSubData(target: GLenum, offset: GLintptr, size: GLsizeiptr, data: *GLvoid);
