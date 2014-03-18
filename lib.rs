@@ -9,7 +9,7 @@
 
 #[crate_id = "github.com/mozilla-servo/rust-opengles#opengles:0.1"];
 
-extern mod std;
+extern crate std;
 
 pub mod gl2;
 

@@ -15,7 +15,6 @@ use std::cast;
 use std::cast::transmute;
 use std::cmp;
 use std::ptr;
-use std::ptr::to_unsafe_ptr;
 use std::str::from_utf8;
 use std::str::raw::from_c_str;
 use std::mem::size_of;
@@ -725,7 +724,7 @@ pub fn get_error() -> GLenum {
 
 pub fn get_integer_v(pname: GLenum, result: &mut [GLint]) {
     unsafe {
-        glGetIntegerv(pname, to_unsafe_ptr(&result[0]));
+        glGetIntegerv(pname, &result[0]);
     }
 }
 
@@ -735,17 +734,17 @@ pub fn get_program_info_log(program: GLuint) -> ~str {
         let result_len: GLsizei = 0 as GLsizei;
         glGetProgramInfoLog(program,
                             1024 as GLsizei,
-                            to_unsafe_ptr(&result_len),
+                            &result_len,
                             result.as_ptr() as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        from_utf8(result).to_owned()
+        from_utf8(result).unwrap().to_owned()
     }
 }
 
 pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
     unsafe {
         let result: GLint = 0 as GLint;
-        glGetProgramiv(program, pname, to_unsafe_ptr(&result));
+        glGetProgramiv(program, pname, &result);
         return result;
     }
 }
@@ -756,17 +755,17 @@ pub fn get_shader_info_log(shader: GLuint) -> ~str {
         let result_len: GLsizei = 0 as GLsizei;
         glGetShaderInfoLog(shader,
                            1024 as GLsizei,
-                           to_unsafe_ptr(&result_len),
+                           &result_len,
                            result.as_ptr() as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        from_utf8(result).to_owned()
+        from_utf8(result).unwrap().to_owned()
     }
 }
 
 pub fn get_string(which: GLenum) -> ~str {
     unsafe {
         let llstr = glGetString(which);
-        if !ptr::is_null(llstr) {
+        if !llstr.is_null() {
             return from_c_str(llstr as *c_char);
         } else {
             return ~"";
@@ -777,7 +776,7 @@ pub fn get_string(which: GLenum) -> ~str {
 pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
     unsafe {
         let result: GLint = 0 as GLint;
-        glGetShaderiv(shader, pname, to_unsafe_ptr(&result));
+        glGetShaderiv(shader, pname, &result);
         return result;
     }
 }

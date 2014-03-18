@@ -19,7 +19,7 @@ RUST_SRC=$(shell find $(VPATH)/. -type f -name '*.rs')
 all:    libopengles.dummy
 
 libopengles.dummy: lib.rs $(RUST_SRC)
-	$(RUSTC) $(RUSTFLAGS) $< --lib --out-dir .
+	$(RUSTC) $(RUSTFLAGS) $< --crate-type=lib --out-dir .
 	touch $@
 
 opengles-test: lib.rs $(RUST_SRC)
