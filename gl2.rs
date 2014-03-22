@@ -18,7 +18,7 @@ use std::ptr;
 use std::str::from_utf8;
 use std::str::raw::from_c_str;
 use std::mem::size_of;
-use std::vec::from_elem;
+use std::slice::from_elem;
 
 // Linking
 #[nolink]
