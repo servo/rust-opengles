@@ -14,13 +14,13 @@ use std::libc::{c_char, c_int, c_ulong};
 // Types
 
 pub struct Display {
-    priv opaque: (),
+    opaque: (),
 }
 
 pub type GLXDrawable = c_ulong;
 
 pub struct __GLXFBConfig {
-    priv opaque: (),
+    opaque: (),
 }
 
 pub type GLXFBConfig = *__GLXFBConfig;
@@ -30,7 +30,7 @@ pub type GLXPixmap = c_ulong;
 pub type Pixmap = c_ulong;
 
 pub struct __XVisualInfo {
-    priv opaque: (),
+    opaque: (),
 }
 
 pub type XVisualInfo = *__XVisualInfo;

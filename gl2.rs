@@ -888,8 +888,8 @@ pub fn scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
 }
 
 pub fn shader_source(shader: GLuint, strings: &[&[u8]]) {
-    let pointers = strings.map(|string| (*string).as_ptr());
-    let lengths = strings.map(|string| string.len() as GLint);
+    let pointers: ~[*u8] = strings.iter().map(|string| (*string).as_ptr()).collect();
+    let lengths: ~[GLint] = strings.iter().map(|string| string.len() as GLint).collect();
     unsafe {
         glShaderSource(shader, pointers.len() as GLsizei,
                        pointers.as_ptr() as **GLchar, lengths.as_ptr());
