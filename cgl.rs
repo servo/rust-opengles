@@ -9,10 +9,10 @@
 
 // Mac-specific OpenGL bindings.
 
-#[allow(non_uppercase_statics)];
+#![allow(non_uppercase_statics)]
 
 use gl2::{GLenum, GLint, GLsizei, GLuint};
-use std::libc::{c_void, c_int};
+use libc::{c_void, c_int};
 
 pub type CGLContextObj = *c_void;
 pub type CGLError = c_int;
@@ -103,7 +103,6 @@ pub static CORE_INTEGER_ATTRIBUTES: &'static [CGLPixelFormatAttribute] =
       kCGLPFAOpenGLProfile,
       kCGLPFAVirtualScreenCount];
 
-#[nolink]
 extern {
     // CGLCurrent.h
 
