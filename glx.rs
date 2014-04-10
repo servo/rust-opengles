@@ -9,7 +9,7 @@
 
 //! Functions for X11 support.
 
-use std::libc::{c_char, c_int, c_ulong};
+use libc::{c_char, c_int, c_ulong};
 
 // Types
 
