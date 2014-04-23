@@ -18,7 +18,7 @@ use std::ptr;
 use std::str::from_utf8;
 use std::str::raw::from_c_str;
 use std::mem::size_of;
-use std::slice::from_elem;
+use std::vec::Vec;
 
 // Linking
 #[cfg(target_os = "macos")]
@@ -673,25 +673,25 @@ pub fn front_face(mode: GLenum) {
 
 pub fn gen_buffers(n: GLsizei) -> ~[GLuint] {
     unsafe {
-        let result = from_elem(n as uint, 0 as GLuint);
+        let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenBuffers(n, result.as_ptr());
-        return result;
+        return result.as_slice().to_owned();
     }
 }
 
 pub fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
     unsafe {
-        let result = from_elem(n as uint, 0 as GLuint);
+        let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenFramebuffers(n, result.as_ptr());
-        return result;
+        return result.as_slice().to_owned();
     }
 }
 
 pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
     unsafe {
-        let result = from_elem(n as uint, 0 as GLuint);
+        let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenTextures(n, result.as_ptr());
-        return result;
+        return result.as_slice().to_owned();
     }
 }
 
@@ -699,9 +699,9 @@ pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
 #[cfg(not(target_os="android"), not(mac_10_6))]
 pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
     unsafe {
-        let result = from_elem(n as uint, 0 as GLuint);
+        let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenVertexArrays(n, result.as_ptr());
-        return result;
+        return result.as_slice().to_owned();
     }
 }
 
@@ -727,14 +727,14 @@ pub fn get_integer_v(pname: GLenum, result: &mut [GLint]) {
 
 pub fn get_program_info_log(program: GLuint) -> ~str {
     unsafe {
-        let mut result = from_elem(1024u, 0u8);
+        let mut result = Vec::from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
         glGetProgramInfoLog(program,
                             1024 as GLsizei,
                             &result_len,
                             result.as_ptr() as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        from_utf8(result).unwrap().to_owned()
+        from_utf8(result.as_slice()).unwrap().to_owned()
     }
 }
 
@@ -748,14 +748,14 @@ pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
 
 pub fn get_shader_info_log(shader: GLuint) -> ~str {
     unsafe {
-        let mut result = from_elem(1024u, 0u8);
+        let mut result = Vec::from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
         glGetShaderInfoLog(shader,
                            1024 as GLsizei,
                            &result_len,
                            result.as_ptr() as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        from_utf8(result).unwrap().to_owned()
+        from_utf8(result.as_slice()).unwrap().to_owned()
     }
 }
 
@@ -865,7 +865,7 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
     };
 
     let len = (width * height * colors * depth) as uint;
-    let mut pixels: ~[u8] = ~[];
+    let mut pixels: ~Vec<u8> = ~Vec::new();
     pixels.reserve(len);
 
     unsafe {
@@ -875,7 +875,7 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
         pixels.set_len(len);
     }
 
-    pixels
+    pixels.as_slice().to_owned()
 }
 
 pub fn scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
