@@ -671,37 +671,37 @@ pub fn front_face(mode: GLenum) {
     }
 }
 
-pub fn gen_buffers(n: GLsizei) -> ~[GLuint] {
+pub fn gen_buffers(n: GLsizei) -> Vec<GLuint> {
     unsafe {
         let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenBuffers(n, result.as_ptr());
-        return result.as_slice().to_owned();
+        return result;
     }
 }
 
-pub fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
+pub fn gen_framebuffers(n: GLsizei) -> Vec<GLuint> {
     unsafe {
         let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenFramebuffers(n, result.as_ptr());
-        return result.as_slice().to_owned();
+        return result;
     }
 }
 
-pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
+pub fn gen_textures(n: GLsizei) -> Vec<GLuint> {
     unsafe {
         let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenTextures(n, result.as_ptr());
-        return result.as_slice().to_owned();
+        return result;
     }
 }
 
 #[cfg(not(target_os="android"), not(target_os="macos"))]
 #[cfg(not(target_os="android"), not(mac_10_6))]
-pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
+pub fn gen_vertex_arrays(n: GLsizei) -> Vec<GLuint> {
     unsafe {
         let result = Vec::from_elem(n as uint, 0 as GLuint);
         glGenVertexArrays(n, result.as_ptr());
-        return result.as_slice().to_owned();
+        return result;
     }
 }
 
@@ -765,7 +765,7 @@ pub fn get_string(which: GLenum) -> ~str {
         if !llstr.is_null() {
             return from_c_str(llstr as *c_char);
         } else {
-            return ~"";
+            return "".to_owned();
         }
     }
 }
@@ -853,19 +853,19 @@ pub fn polygon_mode(face: GLenum, mode: GLenum) {
     }
 }
 
-pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, pixel_type: GLenum) -> ~[u8] {
+pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, pixel_type: GLenum) -> Vec<u8> {
     let colors = match format {
         RGB => 3,
         RGBA => 3,
-        _ => fail!(~"unsupported format for read_pixels"),
+        _ => fail!("unsupported format for read_pixels"),
     };
     let depth = match pixel_type {
         UNSIGNED_BYTE => 1,
-        _ => fail!(~"unsupported pixel_type for read_pixels"),
+        _ => fail!("unsupported pixel_type for read_pixels"),
     };
 
     let len = (width * height * colors * depth) as uint;
-    let mut pixels: ~Vec<u8> = ~Vec::new();
+    let mut pixels: Vec<u8> = Vec::new();
     pixels.reserve(len);
 
     unsafe {
@@ -875,7 +875,7 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
         pixels.set_len(len);
     }
 
-    pixels.as_slice().to_owned()
+    pixels
 }
 
 pub fn scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
