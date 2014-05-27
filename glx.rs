@@ -79,6 +79,8 @@ pub static GLX_AUX9_EXT: c_int        = 0x20eb;
 pub static GLX_DRAWABLE_TYPE: c_int   = 0x8010;
 pub static GLX_RENDER_TYPE: c_int     = 0x8011;
 
+pub static GLX_VENDOR: c_int          = 1;
+
 pub static GLX_RGBA: c_int            = 4;
 pub static GLX_DOUBLEBUFFER: c_int    = 5;
 pub static GLX_ALPHA_SIZE: c_int      = 11;
