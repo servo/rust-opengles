@@ -11,8 +11,7 @@
 
 use libc::{c_uint, c_uchar, c_void, c_char, int8_t, c_short, c_int, uint8_t, c_ushort};
 use libc::{int32_t, intptr_t, ssize_t};
-use std::cast;
-use std::cast::transmute;
+use std::mem;
 use std::cmp;
 use std::ptr;
 use std::str::from_utf8;
@@ -587,7 +586,7 @@ pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices
                                   },
                                   element_type,
                                   match indices {
-                                    Some(ref i) => cast::transmute(&i[0]),
+                                    Some(ref i) => mem::transmute(&i[0]),
                                     None => ptr::null(),
                                   })
     }
@@ -612,7 +611,7 @@ pub fn draw_elements_instanced(mode: GLenum, count: GLsizei, element_type: GLenu
                                     },
                                     element_type,
                                     match indices {
-                                      Some(ref i) => cast::transmute(&i[0]),
+                                      Some(ref i) => mem::transmute(&i[0]),
                                       None => ptr::null(),
                                     }, 
                                     primcount);
@@ -725,7 +724,7 @@ pub fn get_integer_v(pname: GLenum, result: &mut [GLint]) {
     }
 }
 
-pub fn get_program_info_log(program: GLuint) -> ~str {
+pub fn get_program_info_log(program: GLuint) -> String {
     unsafe {
         let mut result = Vec::from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
@@ -734,7 +733,7 @@ pub fn get_program_info_log(program: GLuint) -> ~str {
                             &result_len,
                             result.as_ptr() as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        from_utf8(result.as_slice()).unwrap().to_owned()
+        from_utf8(result.as_slice()).unwrap().to_string()
     }
 }
 
@@ -746,7 +745,7 @@ pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
     }
 }
 
-pub fn get_shader_info_log(shader: GLuint) -> ~str {
+pub fn get_shader_info_log(shader: GLuint) -> String {
     unsafe {
         let mut result = Vec::from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
@@ -755,17 +754,17 @@ pub fn get_shader_info_log(shader: GLuint) -> ~str {
                            &result_len,
                            result.as_ptr() as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
-        from_utf8(result.as_slice()).unwrap().to_owned()
+        from_utf8(result.as_slice()).unwrap().to_string()
     }
 }
 
-pub fn get_string(which: GLenum) -> ~str {
+pub fn get_string(which: GLenum) -> String {
     unsafe {
         let llstr = glGetString(which);
         if !llstr.is_null() {
             return from_c_str(llstr as *c_char);
         } else {
-            return "".to_owned();
+            return "".to_string();
         }
     }
 }
@@ -885,8 +884,8 @@ pub fn scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
 }
 
 pub fn shader_source(shader: GLuint, strings: &[&[u8]]) {
-    let pointers: ~[*u8] = strings.iter().map(|string| (*string).as_ptr()).collect();
-    let lengths: ~[GLint] = strings.iter().map(|string| string.len() as GLint).collect();
+    let pointers: Vec<*u8> = strings.iter().map(|string| (*string).as_ptr()).collect();
+    let lengths: Vec<GLint> = strings.iter().map(|string| string.len() as GLint).collect();
     unsafe {
         glShaderSource(shader, pointers.len() as GLsizei,
                        pointers.as_ptr() as **GLchar, lengths.as_ptr());
@@ -908,7 +907,7 @@ pub fn tex_image_2d(target: GLenum,
     match opt_data {
         Some(data) => {
             unsafe {
-                let pdata = transmute(data.as_ptr());
+                let pdata = mem::transmute(data.as_ptr());
                 glTexImage2D(target, level, internal_format, width, height, border, format, ty,
                                  pdata);
             }
@@ -935,7 +934,7 @@ pub fn tex_sub_image_2d(target: GLenum,
     match opt_data {
         Some(data) => {
             unsafe {
-                let pdata = transmute(data.as_ptr());
+                let pdata = mem::transmute(data.as_ptr());
                 glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
                                    pdata);
             }
@@ -990,7 +989,7 @@ pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: &[f32]) {
         glUniformMatrix4fv(location,
                                1 as GLsizei,
                                transpose as GLboolean,
-                               cast::transmute(&value[0]));
+                               mem::transmute(&value[0]));
     }
 }
 
@@ -1017,7 +1016,7 @@ pub fn vertex_attrib_pointer_f32(index: GLuint,
                                   FLOAT,
                                   normalized as GLboolean,
                                   stride,
-                                  transmute(offset as uint));
+                                  mem::transmute(offset as uint));
     }
 }
 
@@ -1032,7 +1031,7 @@ pub fn vertex_attrib_pointer_i8(index: GLuint,
                                   BYTE,
                                   normalized as GLboolean,
                                   stride,
-                                  transmute(offset as uint));
+                                  mem::transmute(offset as uint));
     }
 }
 
@@ -1047,7 +1046,7 @@ pub fn vertex_attrib_pointer_i32(index: GLuint,
                                   INT,
                                   normalized as GLboolean,
                                   stride,
-                                  transmute(offset as uint));
+                                  mem::transmute(offset as uint));
     }
 }
 
@@ -1062,7 +1061,7 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
                                   UNSIGNED_BYTE,
                                   normalized as GLboolean,
                                   stride,
-                                  transmute(offset as uint));
+                                  mem::transmute(offset as uint));
     }
 }
 
@@ -1100,10 +1099,10 @@ pub fn egl_image_target_renderbuffer_storage_oes(target: GLenum, image: GLeglIma
 #[cfg(target_os="macos")]
 pub mod apple {
     use super::{GLenum, GLsizei};
-    use std::cast::transmute;
+    use std::mem;
 
     pub unsafe fn texture_range(target: GLenum, buffer: &[u8]) {
-        super::glTextureRangeAPPLE(target, buffer.len() as GLsizei, transmute(buffer.as_ptr()));
+        super::glTextureRangeAPPLE(target, buffer.len() as GLsizei, mem::transmute(buffer.as_ptr()));
     }
 }
 
