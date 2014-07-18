@@ -23,7 +23,7 @@ pub struct __GLXFBConfig {
     opaque: (),
 }
 
-pub type GLXFBConfig = *__GLXFBConfig;
+pub type GLXFBConfig = *const __GLXFBConfig;
 
 pub type GLXPixmap = c_ulong;
 
@@ -33,7 +33,7 @@ pub struct __XVisualInfo {
     opaque: (),
 }
 
-pub type XVisualInfo = *__XVisualInfo;
+pub type XVisualInfo = *const __XVisualInfo;
 
 // Constants
 
@@ -95,44 +95,44 @@ pub static GLX_RGBA_BIT: c_int        = 0x00000001;
 // Functions
 
 extern {
-    pub fn glXQueryVersion(dpy: *Display, major: *mut c_int, minor: *mut c_int) -> bool;
+    pub fn glXQueryVersion(dpy: *const Display, major: *mut c_int, minor: *mut c_int) -> bool;
 
-    pub fn glXGetProcAddress(procName: *c_char) -> extern "C" fn();
+    pub fn glXGetProcAddress(procName: *const c_char) -> extern "C" fn();
 
-    pub fn glXReleaseTexImageEXT(dpy: *Display, drawable: GLXDrawable, buffer: c_int);
+    pub fn glXReleaseTexImageEXT(dpy: *const Display, drawable: GLXDrawable, buffer: c_int);
 
-    pub fn glXChooseFBConfig(dpy: *Display,
+    pub fn glXChooseFBConfig(dpy: *const Display,
                              screen: c_int,
-                             attrib_list: *c_int,
+                             attrib_list: *const c_int,
                              n_elements: *mut c_int)
-                             -> *GLXFBConfig;
+                             -> *const GLXFBConfig;
 
-    pub fn glXChooseVisual(dpy: *Display, screen: c_int, attribList: *c_int) -> *XVisualInfo;
+    pub fn glXChooseVisual(dpy: *const Display, screen: c_int, attribList: *const c_int) -> *const XVisualInfo;
 
     // For GLX 1.3+
-    pub fn glXCreatePixmap(dpy: *Display, config: GLXFBConfig, pixmap: Pixmap, attribList: *c_int)
+    pub fn glXCreatePixmap(dpy: *const Display, config: GLXFBConfig, pixmap: Pixmap, attribList: *const c_int)
                            -> GLXPixmap;
 
-    pub fn glXDestroyPixmap(dpy: *Display, pixmap: GLXPixmap);
+    pub fn glXDestroyPixmap(dpy: *const Display, pixmap: GLXPixmap);
 
     // For GLX < 1.3. Use only to match behavior with other libraries (i.e. Skia) that
     // access GLX pixmaps using the visual instead of fbconfig.
-    pub fn glXCreateGLXPixmap(dpy: *Display, visual: *XVisualInfo, pixmap: Pixmap) -> GLXPixmap;
+    pub fn glXCreateGLXPixmap(dpy: *const Display, visual: *const XVisualInfo, pixmap: Pixmap) -> GLXPixmap;
 
-    pub fn glXDestroyGLXPixmap(dpy: *Display, pix: GLXPixmap);
+    pub fn glXDestroyGLXPixmap(dpy: *const Display, pix: GLXPixmap);
 
-    pub fn glXGetFBConfigAttrib(dpy: *Display,
+    pub fn glXGetFBConfigAttrib(dpy: *const Display,
                                 config: GLXFBConfig,
                                 attribute: c_int,
                                 value: *mut c_int)
                                 -> c_int;
 
-    pub fn glXGetFBConfigs(dpy: *Display, screen: c_int, nelements: *mut c_int) -> *GLXFBConfig;
+    pub fn glXGetFBConfigs(dpy: *const Display, screen: c_int, nelements: *mut c_int) -> *const GLXFBConfig;
 
-    pub fn glXGetVisualFromFBConfig(dpy: *Display, config: GLXFBConfig) -> *XVisualInfo;
+    pub fn glXGetVisualFromFBConfig(dpy: *const Display, config: GLXFBConfig) -> *const XVisualInfo;
 }
 
-pub fn get_version(display: *Display) -> (int, int) {
+pub fn get_version(display: *const Display) -> (int, int) {
     unsafe {
         let mut major = 0;
         let mut minor = 0;
