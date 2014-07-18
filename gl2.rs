@@ -12,7 +12,6 @@
 use libc::{c_uint, c_uchar, c_void, c_char, int8_t, c_short, c_int, uint8_t, c_ushort};
 use libc::{int32_t,intptr_t, ssize_t};
 use std::string::String;
-use std::vec::Vec;
 
 use std::mem;
 use std::mem::transmute;
@@ -382,9 +381,8 @@ pub fn attach_shader(program: GLuint, shader: GLuint) {
 
 pub fn bind_attrib_location(program: GLuint, index: GLuint, name: &str) {
     unsafe {
-        name.to_c_str().with_ref(|cstr| {
-            glBindAttribLocation(program, index, cstr);
-        });
+        let cstr = name.to_c_str().as_ptr();
+        glBindAttribLocation(program, index, cstr);
     }
 }
 
@@ -710,9 +708,8 @@ pub fn gen_vertex_arrays(n: GLsizei) -> Vec<GLuint> {
 
 pub fn get_attrib_location(program: GLuint, name: &str) -> c_int {
     unsafe {
-        name.to_c_str().with_ref(|name_bytes| {
-            glGetAttribLocation(program, name_bytes as *const GLchar)
-        })
+    	let name_bytes = name.to_c_str().as_ptr();
+        glGetAttribLocation(program, name_bytes as *const GLchar)
     }
 }
 
@@ -758,7 +755,7 @@ pub fn get_shader_info_log(shader: GLuint) -> String {
                            &result_len,
                            result.as_ptr() as *const GLchar);
         result.truncate(if result_len > 0 {(result_len-1) as uint} else {0} as uint);
-        from_utf8(result.as_slice()).unwrap().to_owned()
+        from_utf8(result.as_slice()).unwrap().to_string()
     }
 }
 
@@ -783,9 +780,8 @@ pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
 
 pub fn get_uniform_location(program: GLuint, name: &str) -> c_int {
     unsafe {
-        name.to_c_str().with_ref(|name_bytes| {
-            glGetUniformLocation(program, name_bytes as *const GLchar)
-        })
+    	let name_bytes = name.to_c_str().as_ptr();
+        glGetUniformLocation(program, name_bytes as *const GLchar)
     }
 }
 
