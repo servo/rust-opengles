@@ -3,6 +3,9 @@ VPATH=%VPATH%
 RUSTC ?= rustc
 RUSTFLAGS ?=
 EXT_DEPS ?=
+RUSTDOC ?= rustdoc
+RUSTDOC_FLAGS ?=
+RUSTDOC_TARGET ?= doc
 
 ifeq ($(shell uname -s),Darwin)
 ifeq ($(shell sw_vers | grep -c 10.6),1)
@@ -25,6 +28,12 @@ libopengles.dummy: lib.rs $(RUST_SRC) $(EXT_DEPS)
 
 opengles-test: lib.rs $(RUST_SRC)
 	$(RUSTC) $(RUSTFLAGS) $< -o $@ --test
+
+.PHONY: doc
+doc: $(RUSTDOC_TARGET)/opengles/index.html
+
+$(RUSTDOC_TARGET)/opengles/index.html: lib.rs $(RUST_SRC) $(EXT_DEPS)
+	$(RUSTDOC) $(RUSTDOC_FLAGS) $< -o $(RUSTDOC_TARGET)
 
 .PHONY: check
 check: opengles-test
