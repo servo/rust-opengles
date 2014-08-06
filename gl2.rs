@@ -15,7 +15,7 @@ use std::mem;
 use std::cmp;
 use std::ptr;
 use std::str::from_utf8;
-use std::str::raw::from_c_str;
+use std::string;
 use std::mem::size_of;
 use std::vec::Vec;
 
@@ -758,7 +758,7 @@ pub fn get_string(which: GLenum) -> String {
     unsafe {
         let llstr = glGetString(which);
         if !llstr.is_null() {
-            return from_c_str(llstr as *const c_char);
+            return string::raw::from_buf(llstr as *const u8);
         } else {
             return "".to_string();
         }
