@@ -2,3 +2,5 @@ Makefile
 libopengles-*.so
 librustopengles.dummy
 /doc
+/target
+/Cargo.lock
