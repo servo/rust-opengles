@@ -17,22 +17,22 @@ endif
 else
 endif
 
-RUST_SRC=$(shell find $(VPATH)/. -type f -name '*.rs')
+RUST_SRC=$(shell find $(VPATH)/src -type f -name '*.rs')
 
 .PHONY: all
 all:    libopengles.dummy
 
-libopengles.dummy: lib.rs $(RUST_SRC) $(EXT_DEPS)
+libopengles.dummy: src/lib.rs $(RUST_SRC) $(EXT_DEPS)
 	$(RUSTC) $(RUSTFLAGS) $< --out-dir .
 	touch $@
 
-opengles-test: lib.rs $(RUST_SRC)
+opengles-test: src/lib.rs $(RUST_SRC)
 	$(RUSTC) $(RUSTFLAGS) $< -o $@ --test
 
 .PHONY: doc
 doc: $(RUSTDOC_TARGET)/opengles/index.html
 
-$(RUSTDOC_TARGET)/opengles/index.html: lib.rs $(RUST_SRC) $(EXT_DEPS)
+$(RUSTDOC_TARGET)/opengles/index.html: src/lib.rs $(RUST_SRC) $(EXT_DEPS)
 	$(RUSTDOC) $(RUSTDOC_FLAGS) $< -o $(RUSTDOC_TARGET)
 
 .PHONY: check
