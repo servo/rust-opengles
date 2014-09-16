@@ -11,7 +11,6 @@
 #![crate_type = "rlib"]
 
 extern crate libc;
-extern crate std;
 
 pub mod gl2;
 
