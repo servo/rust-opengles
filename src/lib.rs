@@ -13,7 +13,3 @@
 extern crate libc;
 
 pub mod gl2;
-
-#[cfg(target_os="macos")]
-pub mod cgl;
-
